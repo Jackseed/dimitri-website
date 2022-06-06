@@ -16,9 +16,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Angular Material
 import { MatGridListModule } from '@angular/material/grid-list';
+import { ProjectViewComponent } from './project-view/project-view.component';
 
 @NgModule({
-  declarations: [AppComponent, HomepageComponent],
+  declarations: [AppComponent, HomepageComponent, ProjectViewComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
