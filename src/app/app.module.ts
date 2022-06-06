@@ -10,17 +10,17 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { HomepageComponent } from './homepage/homepage.component';
 
+// Flex Layout
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 @NgModule({
   declarations: [AppComponent, HomepageComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FlexLayoutModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-    provideFirestore(() => {
-      const firestore = getFirestore();
-      // connectFirestoreEmulator(firestore, 'localhost', 8080);
-      return firestore;
-    }),
+    provideFirestore(() => getFirestore()),
   ],
   providers: [],
   bootstrap: [AppComponent],
