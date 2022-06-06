@@ -12,6 +12,7 @@ import { HomepageComponent } from './homepage/homepage.component';
 
 // Flex Layout
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent, HomepageComponent],
@@ -21,6 +22,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     FlexLayoutModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
+    NoopAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
