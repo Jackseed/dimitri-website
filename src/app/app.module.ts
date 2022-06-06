@@ -12,6 +12,10 @@ import { HomepageComponent } from './homepage/homepage.component';
 
 // Flex Layout
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
+// Angular Material
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [AppComponent, HomepageComponent],
@@ -19,8 +23,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     BrowserModule,
     AppRoutingModule,
     FlexLayoutModule,
+    MatGridListModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
+    NoopAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
