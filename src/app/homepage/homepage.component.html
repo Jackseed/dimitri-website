@@ -1,10 +1,20 @@
 <div fxFlexFill fxLayout="column" fxLayoutAlign="start start">
-  <header fxFlex="5">
+  <header fxFlexFill fxFlex="4">
     <nav fxFlexFill fxLayout="row">
       <a href="/"><img src="../assets/mail.png" /></a>
       <a href="/"><img src="../assets/insta.png" /></a>
       <a href="/"><img src="../assets/pinterest.png" /></a>
     </nav>
   </header>
-  <main fxFlex></main>
+  <main fxFlexFill fxFlex="95">
+    <mat-grid-list [cols]="grid.cols" [gutterSize]="grid.gutterSize">
+      <mat-grid-tile *ngFor="let image of images">
+        <img
+          routerLink="/{{ image.projectId }}"
+          class="tiles pointer"
+          src="{{ image.url }}"
+        />
+      </mat-grid-tile>
+    </mat-grid-list>
+  </main>
 </div>
