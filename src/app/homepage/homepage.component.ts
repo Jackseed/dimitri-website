@@ -1,20 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
-interface Grid {
-  cols: number;
-  gutterSize: string;
-}
-
-interface Image {
-  img?: string;
-  alt?: string;
-  link?: string;
-  id?: string;
-  url?: string;
-  path?: string;
-  projectId?: string;
-  position?: number;
-}
+import { Grid, Image } from '../models';
 
 @Component({
   selector: 'app-homepage',
