@@ -1,1 +1,132 @@
-<p>project-form works!</p>
+<div fxFlexFill fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center">
+  <div fxFlex.lt-md="90">
+    <button mat-icon-button (click)="back()">
+      <mat-icon>keyboard_backspace</mat-icon>
+    </button>
+    <div
+      fxFlexLayout="row"
+      fxFlexAlign="center end"
+      ngClass.lt-md="title-line-mobile"
+      ngClass.gt-sm="title-line"
+    >
+      <h1 class="title" fxFlex="nogrow">Projet</h1>
+      <div
+        class="icon-text"
+        fxFlex
+        *ngIf="(project$ | async)?.status === 'published'"
+      >
+        <mat-icon>check_circle_outline</mat-icon> <span>Projet publié</span>
+      </div>
+      <div fxFlex></div>
+      <div
+        fxFlex="nogrow"
+        class="title-button"
+        *ngIf="project$ | async as project"
+      >
+        <button mat-icon-button (click)="openDialog()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <div
+        fxFlex="nogrow"
+        class="title-button"
+        *ngIf="project$ | async as project"
+      >
+        <button
+          mat-stroked-button
+          [routerLink]="['/admin', project.id, 'view']"
+          type="submit"
+          (click)="save()"
+        >
+          Prévisualiser
+        </button>
+      </div>
+      <div fxFlex="nogrow" *ngIf="(project$ | async)?.status === 'draft'">
+        <button mat-stroked-button (click)="publish()">Publier</button>
+      </div>
+      <div fxFlex="nogrow" *ngIf="(project$ | async)?.status === 'published'">
+        <button mat-stroked-button (click)="unpublish()">
+          Retirer du site
+        </button>
+      </div>
+    </div>
+    <form [formGroup]="newProject" (ngSubmit)="onSubmit()">
+      <h2>
+        <mat-form-field>
+          <mat-label>Titre</mat-label>
+          <input matInput type="text" formControlName="title" />
+        </mat-form-field>
+      </h2>
+
+      <h3>
+        <mat-form-field class="description">
+          <mat-label>Description</mat-label>
+          <textarea
+            matInput
+            type="text"
+            formControlName="description"
+          ></textarea>
+        </mat-form-field>
+      </h3>
+      <div fxLayout="row">
+        <p>
+          <mat-form-field fxFlex="nogrow" class="padding-right">
+            <mat-label>Signature</mat-label>
+            <input matInput type="text" formControlName="caption" />
+          </mat-form-field>
+
+          <mat-form-field fxFlex="nogrow">
+            <mat-label>Légende finale</mat-label>
+            <input matInput type="text" formControlName="finalCaption" />
+          </mat-form-field>
+          <button
+            mat-stroked-button
+            class="save-button"
+            type="submit"
+            (click)="save()"
+            fxFlex="nogrow"
+          >
+            Sauvegarder
+          </button>
+        </p>
+      </div>
+    </form>
+
+    <div
+      ngClass.lt-md="images-projet-mobile"
+      ngClass.gt-sm="images-projet"
+      class="upload-box"
+    >
+      <app-uploader></app-uploader>
+    </div>
+
+    <div *ngIf="images$ | async as images" class="images">
+      <div *ngFor="let image of sortByPosition(images)">
+        <h3>Image {{ image.position + 1 }}</h3>
+        <label>
+          Sous-titre :
+          <input type="text" [(ngModel)]="image.caption" />
+        </label>
+
+        <button mat-button (click)="saveCaption(image)">Sauvegarder</button>
+
+        <button mat-icon-button (click)="downImg(image)">
+          <mat-icon>arrow_downward</mat-icon>
+        </button>
+        <button mat-icon-button (click)="upImg(image)">
+          <mat-icon>arrow_upward</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteImg(image)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <div>
+          <img
+            ngClass.lt-md="images-projet-mobile"
+            ngClass.gt-sm="images-projet"
+            src="{{ image.downloadUrl }}"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

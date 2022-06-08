@@ -22,6 +22,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 // Angular Material
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { MatButtonModule } from '@angular/material/button';
     FlexLayoutModule,
     MatGridListModule,
     MatButtonModule,
+    MatIconModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
     NoopAnimationsModule,
