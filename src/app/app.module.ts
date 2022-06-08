@@ -5,6 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
+// Components
+import { ProjectViewComponent } from './project-view/project-view.component';
+import { ProjectFormComponent } from './admin/project-form/project-form.component';
+import { ProjectListComponent } from './admin/project-list/project-list.component';
+
 // Angularfire
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
@@ -16,15 +21,22 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Angular Material
 import { MatGridListModule } from '@angular/material/grid-list';
-import { ProjectViewComponent } from './project-view/project-view.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
-  declarations: [AppComponent, HomepageComponent, ProjectViewComponent],
+  declarations: [
+    AppComponent,
+    HomepageComponent,
+    ProjectViewComponent,
+    ProjectFormComponent,
+    ProjectListComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FlexLayoutModule,
     MatGridListModule,
+    MatButtonModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
     NoopAnimationsModule,
