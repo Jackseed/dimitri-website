@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Image } from '../../models';
+import { ref, Storage } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-project-form',
@@ -13,14 +15,17 @@ export class ProjectFormComponent implements OnInit {
     description: new FormControl(''),
   });
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private storage: Storage) {}
 
   ngOnInit(): void {}
 
   // TODO: use a function onDelete to delete the file on Storage
   public async deleteImg(img: Image) {
-    const imgRef = this.storage.storage.refFromURL(img.downloadUrl);
-    let images = [];
+    const imgRef = ref(this.storage, img.url);
+    let images: Image[] = [];
+
+  }
+  /*
     await this.projectRef
       .collection('images')
       .get()
@@ -270,5 +275,5 @@ export class ProjectFormComponent implements OnInit {
 
   back() {
     this.location.back();
-  }
+  } */
 }
