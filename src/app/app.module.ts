@@ -25,6 +25,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { provideStorage } from '@angular/fire/storage';
 import { getStorage } from 'firebase/storage';
+import { UploaderComponent } from './admin/uploader/uploader.component';
+import { UploadTaskComponent } from './admin/upload-task/upload-task.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { getStorage } from 'firebase/storage';
     ProjectViewComponent,
     ProjectFormComponent,
     ProjectListComponent,
+    UploaderComponent,
+    UploadTaskComponent,
   ],
   imports: [
     BrowserModule,

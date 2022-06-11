@@ -1,0 +1,15 @@
+<div
+  fxFlexFill
+  class="dropzone"
+  dropzone
+  (hovered)="toggleHover($event)"
+  (dropped)="onDrop($event)"
+  [class.hovering]="isHovering"
+>
+  <h3>Upload d'images</h3>
+  <p>Drag & Drop</p>
+</div>
+
+<div *ngFor="let file of files; let i = index">
+  <app-upload-task [file]="file" [i]="i"></app-upload-task>
+</div>
