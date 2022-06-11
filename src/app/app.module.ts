@@ -27,6 +27,7 @@ import { provideStorage } from '@angular/fire/storage';
 import { getStorage } from 'firebase/storage';
 import { UploaderComponent } from './admin/uploader/uploader.component';
 import { UploadTaskComponent } from './admin/upload-task/upload-task.component';
+import { DropzoneDirective } from './admin/dropzone.directive';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { UploadTaskComponent } from './admin/upload-task/upload-task.component';
     ProjectListComponent,
     UploaderComponent,
     UploadTaskComponent,
+    DropzoneDirective,
   ],
   imports: [
     BrowserModule,
