@@ -1,117 +1,96 @@
-<div fxFlexFill fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center">
-  <div fxFlex.lt-md="90">
-    <button mat-icon-button (click)="back()">
-      <mat-icon>keyboard_backspace</mat-icon>
-    </button>
+<div class="container">
+  <button mat-icon-button (click)="back()">
+    <mat-icon>keyboard_backspace</mat-icon>
+  </button>
+  <!---------------------   HEADER  --------------------->
+  <header fxLayoutAlign="start center">
+    <h2>Projet</h2>
     <div
-      fxFlexLayout="row"
-      fxFlexAlign="center end"
-      ngClass.lt-md="title-line-mobile"
-      ngClass.gt-sm="title-line"
+      class="icon-text"
+      fxFlex
+      *ngIf="(project$ | async)?.status === 'published'"
     >
-      <h1 class="title" fxFlex="nogrow">Projet</h1>
-      <div
-        class="icon-text"
-        fxFlex
-        *ngIf="(project$ | async)?.status === 'published'"
+      <mat-icon>check_circle</mat-icon> <span>Projet publié</span>
+    </div>
+    <div fxFlex></div>
+    <button mat-icon-button (click)="openDialog()">
+      <mat-icon>delete</mat-icon>
+    </button>
+
+    <nav *ngIf="project$ | async as project">
+      <button
+        mat-stroked-button
+        [routerLink]="['/admin', project.id, 'view']"
+        type="submit"
+        (click)="save()"
       >
-        <mat-icon>check_circle_outline</mat-icon> <span>Projet publié</span>
-      </div>
-      <div fxFlex></div>
-      <div
-        fxFlex="nogrow"
-        class="title-button"
-        *ngIf="project$ | async as project"
-      >
-        <button mat-icon-button (click)="openDialog()">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-      <div
-        fxFlex="nogrow"
-        class="title-button"
-        *ngIf="project$ | async as project"
-      >
+        Prévisualiser
+      </button>
+    </nav>
+    <div *ngIf="(project$ | async)?.status === 'draft'">
+      <button mat-stroked-button (click)="publish()">Publier</button>
+    </div>
+    <div *ngIf="(project$ | async)?.status === 'published'">
+      <button mat-stroked-button (click)="unpublish()">Retirer du site</button>
+    </div>
+  </header>
+  <!---------------------   FORM  --------------------->
+  <form [formGroup]="newProject" (ngSubmit)="onSubmit()">
+    <h2>
+      <mat-form-field>
+        <mat-label>Titre</mat-label>
+        <input matInput type="text" formControlName="title" />
+      </mat-form-field>
+    </h2>
+
+    <h3>
+      <mat-form-field class="description">
+        <mat-label>Description</mat-label>
+        <textarea matInput type="text" formControlName="description"></textarea>
+      </mat-form-field>
+    </h3>
+    <div fxLayout="row">
+      <p>
         <button
           mat-stroked-button
-          [routerLink]="['/admin', project.id, 'view']"
+          class="save-button"
           type="submit"
           (click)="save()"
+          fxFlex="nogrow"
         >
-          Prévisualiser
+          Sauvegarder
         </button>
-      </div>
-      <div fxFlex="nogrow" *ngIf="(project$ | async)?.status === 'draft'">
-        <button mat-stroked-button (click)="publish()">Publier</button>
-      </div>
-      <div fxFlex="nogrow" *ngIf="(project$ | async)?.status === 'published'">
-        <button mat-stroked-button (click)="unpublish()">
-          Retirer du site
-        </button>
-      </div>
+      </p>
     </div>
-    <!---------------------   FORM  --------------------->
-    <form [formGroup]="newProject" (ngSubmit)="onSubmit()">
-      <h2>
-        <mat-form-field>
-          <mat-label>Titre</mat-label>
-          <input matInput type="text" formControlName="title" />
-        </mat-form-field>
-      </h2>
+  </form>
+  <!-------------------   UPLOAD BOX  ------------------->
+  <div
+    ngClass.lt-md="images-projet-mobile"
+    ngClass.gt-sm="images-projet"
+    class="upload-box"
+  >
+    <app-uploader></app-uploader>
+  </div>
+  <!---------------------   IMAGES  --------------------->
+  <div *ngIf="images$ | async as images" class="images">
+    <div *ngFor="let image of sortByPosition(images)">
+      <h3>Image {{ image.position! + 1 }}</h3>
 
-      <h3>
-        <mat-form-field class="description">
-          <mat-label>Description</mat-label>
-          <textarea
-            matInput
-            type="text"
-            formControlName="description"
-          ></textarea>
-        </mat-form-field>
-      </h3>
-      <div fxLayout="row">
-        <p>
-          <button
-            mat-stroked-button
-            class="save-button"
-            type="submit"
-            (click)="save()"
-            fxFlex="nogrow"
-          >
-            Sauvegarder
-          </button>
-        </p>
-      </div>
-    </form>
-    <!-------------------   UPLOAD BOX  ------------------->
-    <div
-      ngClass.lt-md="images-projet-mobile"
-      ngClass.gt-sm="images-projet"
-      class="upload-box"
-    >
-      <app-uploader></app-uploader>
-    </div>
-    <!---------------------   IMAGES  --------------------->
-    <div *ngIf="images$ | async as images" class="images">
-      <div *ngFor="let image of sortByPosition(images)">
-        <h3>Image {{ image.position! + 1 }}</h3>
-
-        <button mat-icon-button (click)="moveImage(image, -1)">
-          <mat-icon>arrow_downward</mat-icon>
-        </button>
-        <button mat-icon-button (click)="moveImage(image, 1)">
-          <mat-icon>arrow_upward</mat-icon>
-        </button>
-        <button mat-icon-button (click)="deleteImgAndRepositionImages(image)">
-          <mat-icon>delete</mat-icon>
-        </button>
-        <div>
-          <img
-            ngClass.lt-md="images-projet-mobile"
-            ngClass.gt-sm="images-projet"
-            src="{{ image.url }}"
-          />
-        </div>
+      <button mat-icon-button (click)="moveImage(image, -1)">
+        <mat-icon>arrow_downward</mat-icon>
+      </button>
+      <button mat-icon-button (click)="moveImage(image, 1)">
+        <mat-icon>arrow_upward</mat-icon>
+      </button>
+      <button mat-icon-button (click)="deleteImgAndRepositionImages(image)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <div>
+        <img
+          ngClass.lt-md="images-projet-mobile"
+          ngClass.gt-sm="images-projet"
+          src="{{ image.url }}"
+        />
       </div>
     </div>
   </div>

@@ -138,8 +138,7 @@ export class ProjectFormComponent implements OnInit {
 
   // Loads project images.
   private async projectImages(): Promise<Image[]> {
-    const imagesRef = collection(this.db, `${this.projectRef}/images`);
-    const imagesSnapshot = await getDocs(imagesRef);
+    const imagesSnapshot = await getDocs(this.imgsRef);
     let images: Image[] = [];
 
     imagesSnapshot.forEach((doc) => {
@@ -211,7 +210,7 @@ export class ProjectFormComponent implements OnInit {
   }
 
   public unpublish() {
-    updateDoc(this.projectRef, { status: 'published' });
+    updateDoc(this.projectRef, { status: 'draft' });
     this.openSnackBar('Projet retiré du site !');
   }
 

@@ -19,6 +19,10 @@ const routes: Routes = [
     path: 'admin/:id/edit',
     component: ProjectFormComponent,
   },
+  {
+    path: 'admin/:id/view',
+    component: ProjectViewComponent,
+  },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 

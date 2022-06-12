@@ -1,3 +1,5 @@
+@import "~@angular/flex-layout/mq";
+
 html {
   height: 100%;
 }
@@ -18,4 +20,17 @@ p {
   font-family: "Roboto", "Helvetica", sans-serif;
   font-weight: 100;
   font-size: 14px;
+}
+
+span {
+  font-size: 12px;
+  @include layout-bp(xs) {
+    font-size: 14px;
+  }
+  @include layout-bp(sm) {
+    font-size: 12px;
+  }
+  @include layout-bp(xl) {
+    font-size: 12px;
+  }
 }
