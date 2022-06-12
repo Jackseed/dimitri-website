@@ -50,6 +50,7 @@
         </button>
       </div>
     </div>
+    <!---------------------   FORM  --------------------->
     <form [formGroup]="newProject" (ngSubmit)="onSubmit()">
       <h2>
         <mat-form-field>
@@ -70,15 +71,6 @@
       </h3>
       <div fxLayout="row">
         <p>
-          <mat-form-field fxFlex="nogrow" class="padding-right">
-            <mat-label>Signature</mat-label>
-            <input matInput type="text" formControlName="caption" />
-          </mat-form-field>
-
-          <mat-form-field fxFlex="nogrow">
-            <mat-label>Légende finale</mat-label>
-            <input matInput type="text" formControlName="finalCaption" />
-          </mat-form-field>
           <button
             mat-stroked-button
             class="save-button"
@@ -91,7 +83,7 @@
         </p>
       </div>
     </form>
-
+    <!-------------------   UPLOAD BOX  ------------------->
     <div
       ngClass.lt-md="images-projet-mobile"
       ngClass.gt-sm="images-projet"
@@ -99,16 +91,10 @@
     >
       <app-uploader></app-uploader>
     </div>
-
+    <!---------------------   IMAGES  --------------------->
     <div *ngIf="images$ | async as images" class="images">
       <div *ngFor="let image of sortByPosition(images)">
-        <h3>Image {{ image.position + 1 }}</h3>
-        <label>
-          Sous-titre :
-          <input type="text" [(ngModel)]="image.caption" />
-        </label>
-
-        <button mat-button (click)="saveCaption(image)">Sauvegarder</button>
+        <h3>Image {{ image.position! + 1 }}</h3>
 
         <button mat-icon-button (click)="moveImage(image, -1)">
           <mat-icon>arrow_downward</mat-icon>
@@ -123,7 +109,7 @@
           <img
             ngClass.lt-md="images-projet-mobile"
             ngClass.gt-sm="images-projet"
-            src="{{ image.downloadUrl }}"
+            src="{{ image.url }}"
           />
         </div>
       </div>

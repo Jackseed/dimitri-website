@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 // Models
-import { Image } from '../../models';
+import { Image, Project } from '../../models';
 
 // Components
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
@@ -23,6 +23,10 @@ import {
   collection,
   WriteBatch,
   updateDoc,
+  docData,
+  CollectionReference,
+  collectionData,
+  setDoc,
 } from '@angular/fire/firestore';
 
 // Firebase
@@ -32,6 +36,10 @@ import { deleteObject } from 'firebase/storage';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 
+// Rxjs
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 @Component({
   selector: 'app-project-form',
   templateUrl: './project-form.component.html',
@@ -39,6 +47,9 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class ProjectFormComponent implements OnInit {
   private projectRef: DocumentReference;
+  private imgsRef: CollectionReference;
+  public project$: Observable<Project>;
+  public images$: Observable<Image[]>;
   public newProject = new FormGroup({
     title: new FormControl(''),
     description: new FormControl(''),
@@ -54,10 +65,30 @@ export class ProjectFormComponent implements OnInit {
     private dialog: MatDialog
   ) {
     const id = this.route.snapshot.paramMap.get('id')!;
+    // Sets project observable.
     this.projectRef = doc(this.db, `projects/${id}`);
+    this.project$ = docData(this.projectRef);
+    // Sets images observable.
+    this.imgsRef = collection(this.db, `${this.projectRef}/images`);
+    this.images$ = collectionData(this.imgsRef).pipe(
+      map((docs) => docs.map((doc): Image => doc.data))
+    );
   }
 
   ngOnInit(): void {}
+
+  onSubmit() {}
+  save() {
+    setDoc(
+      this.projectRef,
+      {
+        title: this.newProject.value.title,
+        description: this.newProject.value.description,
+      },
+      { merge: true }
+    );
+    this.openSnackBar('Projet sauvegardé !');
+  }
 
   public async deleteImgAndRepositionImages(img: Image) {
     await this.deleteImg(img);
@@ -71,7 +102,7 @@ export class ProjectFormComponent implements OnInit {
     const storageDelete = deleteObject(imgStorageRef);
 
     // Deletes on Firestore.
-    const imgFirestoreRef = doc(this.db, `${this.projectRef}/images/${img.id}`);
+    const imgFirestoreRef = doc(this.db, `${this.imgsRef}/${img.id}`);
     const firestoreDelete = deleteDoc(imgFirestoreRef);
 
     Promise.all([firestoreDelete, storageDelete]);
@@ -117,7 +148,7 @@ export class ProjectFormComponent implements OnInit {
     const batch = writeBatch(this.db);
 
     for (let i = 0; i < images.length; i++) {
-      const imgRef = doc(this.db, `${this.projectRef}/images/${images[i].id}`);
+      const imgRef = doc(this.db, `${this.imgsRef}/${images[i].id}`);
       batch.update(imgRef, {
         position: i,
       });

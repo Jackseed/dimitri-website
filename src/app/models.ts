@@ -13,3 +13,11 @@ export interface Image {
   projectId?: string;
   position?: number;
 }
+
+export interface Project {
+  id?: string;
+  position?: number;
+  title?: string;
+  description?: string;
+  status?: 'draft' | 'published';
+}
