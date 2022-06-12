@@ -37,9 +37,7 @@
       </button>
     </nav>
 
-    <button mat-button type="submit" (click)="save()">
-      Sauvegarder
-    </button>
+    <button mat-button type="submit" (click)="save()">Sauvegarder</button>
   </header>
   <!---------------------   FORM  --------------------->
   <form [formGroup]="newProject" (ngSubmit)="onSubmit()">
@@ -56,19 +54,14 @@
         <textarea matInput type="text" formControlName="description"></textarea>
       </mat-form-field>
     </p>
-    <p></p>
   </form>
   <!-------------------   UPLOAD BOX  ------------------->
-  <div
-    ngClass.lt-md="images-projet-mobile"
-    ngClass.gt-sm="images-projet"
-    class="upload-box"
-  >
+  <section class="upload-box">
     <app-uploader></app-uploader>
-  </div>
+  </section>
   <!---------------------   IMAGES  --------------------->
-  <div *ngIf="images$ | async as images" class="images">
-    <div *ngFor="let image of sortByPosition(images)">
+  <section *ngIf="images$ | async as images" class="images">
+    <article *ngFor="let image of sortByPosition(images)">
       <h3>Image {{ image.position! + 1 }}</h3>
 
       <button mat-icon-button (click)="moveImage(image, -1)">
@@ -87,6 +80,6 @@
           src="{{ image.url }}"
         />
       </div>
-    </div>
-  </div>
+    </article>
+  </section>
 </div>
