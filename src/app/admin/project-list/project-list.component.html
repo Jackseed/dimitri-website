@@ -6,8 +6,12 @@
     </button>
   </header>
   <main>
-    <div *ngFor="let project of projects$ | async">
+    <article
+      class="item"
+      *ngFor="let project of projects$ | async"
+      [routerLink]="[project.id, 'edit']"
+    >
       <h3>{{ project.title }}</h3>
-    </div>
+    </article>
   </main>
 </div>

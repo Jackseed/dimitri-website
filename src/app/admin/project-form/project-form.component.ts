@@ -38,7 +38,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 // Rxjs
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap, first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-project-form',
@@ -54,6 +54,7 @@ export class ProjectFormComponent implements OnInit {
     title: new FormControl(''),
     description: new FormControl(''),
   });
+  private id: string;
 
   constructor(
     private router: Router,
@@ -64,15 +65,23 @@ export class ProjectFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
-    const id = this.route.snapshot.paramMap.get('id')!;
+    this.id = this.route.snapshot.paramMap.get('id')!;
     // Sets project observable.
-    this.projectRef = doc(this.db, `projects/${id}`);
+    this.projectRef = doc(this.db, `projects/${this.id}`);
     this.project$ = docData(this.projectRef);
     // Sets images observable.
-    this.imgsRef = collection(this.db, `projects/${id}/images`);
+    this.imgsRef = collection(this.db, `projects/${this.id}/images`);
     this.images$ = collectionData(this.imgsRef).pipe(
       map((docs) => docs.map((doc): Image => doc.data))
     );
+    this.project$
+      .pipe(
+        tap((project) => {
+          if (project) this.newProject.patchValue(project);
+        }),
+        first()
+      )
+      .subscribe();
   }
 
   ngOnInit(): void {}
@@ -82,6 +91,7 @@ export class ProjectFormComponent implements OnInit {
     setDoc(
       this.projectRef,
       {
+        id: this.id,
         title: this.newProject.value.title,
         description: this.newProject.value.description,
       },
