@@ -7,6 +7,9 @@ import { Location } from '@angular/common';
 // Models
 import { Image } from '../../models';
 
+// Components
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+
 // Angularfire
 import { ref, Storage } from '@angular/fire/storage';
 import {
@@ -178,7 +181,7 @@ export class ProjectFormComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
-      data: 'Attention, si le projet est associé à une vignette, le lien sera cassé. Es-tu sûre de vouloir supprimer ?',
+      data: 'Es-tu sûr de vouloir supprimer ?',
     });
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {

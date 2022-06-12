@@ -5,20 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-// Environments
-import { environment } from 'src/environments/environment';
-
-// Components
-import { ProjectViewComponent } from './project-view/project-view.component';
-import { ProjectFormComponent } from './admin/project-form/project-form.component';
-import { ProjectListComponent } from './admin/project-list/project-list.component';
-import { UploaderComponent } from './admin/uploader/uploader.component';
-import { UploadTaskComponent } from './admin/upload-task/upload-task.component';
-import { HomepageComponent } from './homepage/homepage.component';
-
-// Directives
-import { DropzoneDirective } from './admin/dropzone.directive';
-
 // Angularfire
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
@@ -34,6 +20,21 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 
+// Environments
+import { environment } from 'src/environments/environment';
+
+// Directives
+import { DropzoneDirective } from './admin/dropzone.directive';
+
+// Components
+import { ProjectViewComponent } from './project-view/project-view.component';
+import { ProjectFormComponent } from './admin/project-form/project-form.component';
+import { ProjectListComponent } from './admin/project-list/project-list.component';
+import { UploaderComponent } from './admin/uploader/uploader.component';
+import { UploadTaskComponent } from './admin/upload-task/upload-task.component';
+import { HomepageComponent } from './homepage/homepage.component';
+import { ConfirmationDialogComponent } from './admin/confirmation-dialog/confirmation-dialog.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,6 +45,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     UploaderComponent,
     UploadTaskComponent,
     DropzoneDirective,
+    ConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,
