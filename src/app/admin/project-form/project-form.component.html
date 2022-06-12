@@ -1,7 +1,16 @@
 <div class="container">
-  <button mat-icon-button (click)="back()">
-    <mat-icon>keyboard_backspace</mat-icon>
-  </button>
+  <div>
+    <button mat-icon-button (click)="back()">
+      <mat-icon>keyboard_backspace</mat-icon>
+    </button>
+    <div fxFlex></div>
+    <div *ngIf="(project$ | async)?.status === 'draft'">
+      <button mat-raised-button (click)="publish()">Publier</button>
+    </div>
+    <div *ngIf="(project$ | async)?.status === 'published'">
+      <button mat-raised-button (click)="unpublish()">Retirer du site</button>
+    </div>
+  </div>
   <!---------------------   HEADER  --------------------->
   <header fxLayoutAlign="start center">
     <h2>Projet</h2>
@@ -27,41 +36,27 @@
         Prévisualiser
       </button>
     </nav>
-    <div *ngIf="(project$ | async)?.status === 'draft'">
-      <button mat-stroked-button (click)="publish()">Publier</button>
-    </div>
-    <div *ngIf="(project$ | async)?.status === 'published'">
-      <button mat-stroked-button (click)="unpublish()">Retirer du site</button>
-    </div>
+
+    <button mat-stroked-button type="submit" (click)="save()">
+      Sauvegarder
+    </button>
   </header>
   <!---------------------   FORM  --------------------->
   <form [formGroup]="newProject" (ngSubmit)="onSubmit()">
-    <h2>
-      <mat-form-field>
+    <h3>
+      <mat-form-field class="titre">
         <mat-label>Titre</mat-label>
         <input matInput type="text" formControlName="title" />
       </mat-form-field>
-    </h2>
+    </h3>
 
-    <h3>
+    <p>
       <mat-form-field class="description">
         <mat-label>Description</mat-label>
         <textarea matInput type="text" formControlName="description"></textarea>
       </mat-form-field>
-    </h3>
-    <div fxLayout="row">
-      <p>
-        <button
-          mat-stroked-button
-          class="save-button"
-          type="submit"
-          (click)="save()"
-          fxFlex="nogrow"
-        >
-          Sauvegarder
-        </button>
-      </p>
-    </div>
+    </p>
+    <p></p>
   </form>
   <!-------------------   UPLOAD BOX  ------------------->
   <div
