@@ -110,10 +110,10 @@
 
         <button mat-button (click)="saveCaption(image)">Sauvegarder</button>
 
-        <button mat-icon-button (click)="downImg(image)">
+        <button mat-icon-button (click)="moveImage(image, -1)">
           <mat-icon>arrow_downward</mat-icon>
         </button>
-        <button mat-icon-button (click)="upImg(image)">
+        <button mat-icon-button (click)="moveImage(image, 1)">
           <mat-icon>arrow_upward</mat-icon>
         </button>
         <button mat-icon-button (click)="deleteImg(image)">

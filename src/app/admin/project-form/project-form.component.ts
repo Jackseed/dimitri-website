@@ -1,8 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Image } from '../../models';
 import { ref, Storage } from '@angular/fire/storage';
+import {
+  Firestore,
+  DocumentReference,
+  doc,
+  getDocs,
+  deleteDoc,
+  writeBatch,
+  increment,
+} from '@angular/fire/firestore';
+import { collection, WriteBatch } from 'firebase/firestore';
+import { deleteObject } from 'firebase/storage';
 
 @Component({
   selector: 'app-project-form',
@@ -10,139 +21,98 @@ import { ref, Storage } from '@angular/fire/storage';
   styleUrls: ['./project-form.component.scss'],
 })
 export class ProjectFormComponent implements OnInit {
+  private projectRef: DocumentReference | undefined;
+  private id: string | undefined;
   public newProject = new FormGroup({
     title: new FormControl(''),
     description: new FormControl(''),
   });
 
-  constructor(private router: Router, private storage: Storage) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private storage: Storage,
+    private db: Firestore
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.id = this.route.snapshot.paramMap.get('id')!;
+    this.projectRef = doc(this.db, `projects/${this.id}`);
+  }
 
-  // TODO: use a function onDelete to delete the file on Storage
   public async deleteImg(img: Image) {
-    const imgRef = ref(this.storage, img.url);
+    const imgStorageRef = ref(this.storage, img.url);
+    const imgFirestoreRef = doc(this.db, `${this.projectRef}/images/${img.id}`);
+
+    // Deletes on Firestore.
+    const firestoreDelete = deleteDoc(imgFirestoreRef);
+
+    // Deletes on Storage.
+    const storageDelete = deleteObject(imgStorageRef);
+
+    // Loads project images.
+    const imagesRef = collection(this.db, `${this.projectRef}/images`);
+    const imagesSnapshot = await getDocs(imagesRef);
     let images: Image[] = [];
 
-  }
-  /*
-    await this.projectRef
-      .collection('images')
-      .get()
-      .toPromise()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          images.push(doc.data());
+    imagesSnapshot.forEach((doc) => {
+      images.push(doc.data());
+    });
+
+    console.log('Project images: ', images);
+
+    Promise.all([firestoreDelete, storageDelete])
+      .then(() => {
+        console.log('Fichier supprimée de storage !');
+        // Repositions remaining images.
+        images = this.sortByPosition(images);
+        images.splice(img.position!, 1);
+
+        const batch = this.updateImgPositions(images);
+        // Updates project image count.
+        batch.update(this.projectRef!, {
+          imageCount: increment(-1),
         });
+
+        batch.commit();
       })
       .catch((error) => {
-        console.log('Error getting documents: ', error);
-      });
-
-    // delete on firestore
-    this.projectRef
-      .collection('images')
-      .doc(img.id)
-      .delete()
-      .then((_) => {
-        console.log('Image supprimée de la bdd !');
-        // delete on firestorage
-        imgRef
-          .delete()
-          .then(() => {
-            console.log('Fichier supprimée de storage !');
-            // reposition remaining images
-            images = this.sortByPosition(images);
-            images.splice(img.position, 1);
-
-            const batch = this.updateImgPositions(images);
-
-            batch.update(
-              this.db.firestore.collection('projects').doc(this.id),
-              { imageCount: firestore.FieldValue.increment(-1) }
-            );
-
-            batch.commit();
-          })
-          .catch((error) => {
-            console.error(
-              'Erreur dans la suppression fichier storage: ',
-              error
-            );
-          });
-      })
-      .catch((error) => {
-        console.error('Erreur dans la suppression bdd: ', error);
+        console.error('Erreur dans la suppression fichier storage: ', error);
       });
   }
 
-  public saveCaption(img: Image) {
-    this.projectRef
-      .collection('images')
-      .doc(img.id)
-      .update({ caption: img.caption })
-      .catch((error) => {
-        console.error("Erreur dans l'update caption': ", error);
-      });
-    this.openSnackBar('Sous-titre sauvegardé !');
+  sortByPosition(images: Image[]): Image[] {
+    return images.sort((a, b) => a.position! - b.position!);
   }
 
-  private updateImgPositions(images: Image[]): firestore.WriteBatch {
-    const batch = this.db.firestore.batch();
-    // tslint:disable-next-line: prefer-for-of
+  // Prepares Firestore operations.
+  private updateImgPositions(images: Image[]): WriteBatch {
+    const batch = writeBatch(this.db);
+
     for (let i = 0; i < images.length; i++) {
-      batch.update(
-        this.db.firestore
-          .collection('projects')
-          .doc(this.id)
-          .collection('images')
-          .doc(images[i].id),
-        {
-          position: i,
-        }
-      );
+      const imgRef = doc(this.db, `${this.projectRef}/images/${images[i].id}`);
+      batch.update(imgRef, {
+        position: i,
+      });
     }
     return batch;
   }
 
-  public async upImg(img: Image) {
-    let images = [];
-    await this.projectRef
-      .collection('images')
-      .get()
-      .toPromise()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          images.push(doc.data());
-        });
-      })
-      .catch((error) => {
-        console.log('Error getting documents: ', error);
-      });
-    images = this.sortByPosition(images);
-    images.splice(img.position, 1);
-    images.splice(img.position - 1, 0, img);
-    const batch = this.updateImgPositions(images);
-    batch.commit();
-  }
+  public async moveImage(img: Image, operation: 1 | -1) {
+    if (!img.position) return console.log("Position de l'image non définie");
+    // Loads project images.
+    const imagesRef = collection(this.db, `${this.projectRef}/images`);
+    const imagesSnapshot = await getDocs(imagesRef);
+    let images: Image[] = [];
+    imagesSnapshot.forEach((doc) => {
+      images.push(doc.data());
+    });
 
-  public async downImg(img: Image) {
-    let images = [];
-    await this.projectRef
-      .collection('images')
-      .get()
-      .toPromise()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          images.push(doc.data());
-        });
-      })
-      .catch((error) => {
-        console.log('Error getting documents: ', error);
-      });
     images = this.sortByPosition(images);
+    // Removes the moving image.
     images.splice(img.position, 1);
-    images.splice(img.position + 1, 0, img);
+    // Insert it 1 position before.
+    images.splice(img.position - operation, 0, img);
     const batch = this.updateImgPositions(images);
     batch.commit();
   }
@@ -152,9 +122,8 @@ export class ProjectFormComponent implements OnInit {
       width: '350px',
       data: 'Attention, si le projet est associé à une vignette, le lien sera cassé. Es-tu sûre de vouloir supprimer ?',
     });
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
-        console.log('Yes clicked');
         this.deleteProject();
       }
     });
@@ -275,5 +244,5 @@ export class ProjectFormComponent implements OnInit {
 
   back() {
     this.location.back();
-  } */
+  }
 }
