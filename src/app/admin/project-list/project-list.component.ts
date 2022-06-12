@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Firestore, addDoc, collection } from '@angular/fire/firestore';
+import {
+  Firestore,
+  addDoc,
+  collection,
+  collectionData,
+} from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { Project } from 'src/app/models';
 
 @Component({
   selector: 'app-project-list',
@@ -8,7 +15,12 @@ import { Firestore, addDoc, collection } from '@angular/fire/firestore';
   styleUrls: ['./project-list.component.scss'],
 })
 export class ProjectListComponent implements OnInit {
-  constructor(private db: Firestore, private router: Router) {}
+  public projects$: Observable<Project[]>;
+
+  constructor(private db: Firestore, private router: Router) {
+    const projectsRef = collection(this.db, 'projects');
+    this.projects$ = collectionData(projectsRef);
+  }
 
   ngOnInit(): void {}
 

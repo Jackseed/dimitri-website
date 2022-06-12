@@ -69,7 +69,7 @@ export class ProjectFormComponent implements OnInit {
     this.projectRef = doc(this.db, `projects/${id}`);
     this.project$ = docData(this.projectRef);
     // Sets images observable.
-    this.imgsRef = collection(this.db, `${this.projectRef}/images`);
+    this.imgsRef = collection(this.db, `projects/${id}/images`);
     this.images$ = collectionData(this.imgsRef).pipe(
       map((docs) => docs.map((doc): Image => doc.data))
     );

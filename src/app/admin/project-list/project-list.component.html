@@ -5,4 +5,9 @@
       Ajouter un projet
     </button>
   </header>
+  <main>
+    <div *ngFor="let project of projects$ | async">
+      <h3>{{ project.title }}</h3>
+    </div>
+  </main>
 </div>
