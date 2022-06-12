@@ -5,10 +5,10 @@
     </button>
     <div fxFlex></div>
     <div *ngIf="(project$ | async)?.status === 'draft'">
-      <button mat-raised-button (click)="publish()">Publier</button>
+      <button mat-stroked-button (click)="publish()">Publier</button>
     </div>
     <div *ngIf="(project$ | async)?.status === 'published'">
-      <button mat-raised-button (click)="unpublish()">Retirer du site</button>
+      <button mat-stroked-button (click)="unpublish()">Retirer du site</button>
     </div>
   </div>
   <!---------------------   HEADER  --------------------->
@@ -28,7 +28,7 @@
 
     <nav *ngIf="project$ | async as project">
       <button
-        mat-stroked-button
+        mat-button
         [routerLink]="['/admin', project.id, 'view']"
         type="submit"
         (click)="save()"
@@ -37,7 +37,7 @@
       </button>
     </nav>
 
-    <button mat-stroked-button type="submit" (click)="save()">
+    <button mat-button type="submit" (click)="save()">
       Sauvegarder
     </button>
   </header>
