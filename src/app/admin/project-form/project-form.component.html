@@ -60,7 +60,7 @@
     <app-uploader></app-uploader>
   </section>
   <!---------------------   IMAGES  --------------------->
-  <section *ngIf="images$ | async as images" class="images">
+  <section *ngIf="images$ | async as images">
     <article *ngFor="let image of sortByPosition(images)">
       <h3>Image {{ image.position! + 1 }}</h3>
 
@@ -74,11 +74,7 @@
         <mat-icon>delete</mat-icon>
       </button>
       <div>
-        <img
-          ngClass.lt-md="images-projet-mobile"
-          ngClass.gt-sm="images-projet"
-          src="{{ image.url }}"
-        />
+        <img src="{{ image.url }}" />
       </div>
     </article>
   </section>

@@ -38,7 +38,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 // Rxjs
 import { Observable } from 'rxjs';
-import { map, tap, first } from 'rxjs/operators';
+import { tap, first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-project-form',
@@ -71,9 +71,7 @@ export class ProjectFormComponent implements OnInit {
     this.project$ = docData(this.projectRef);
     // Sets images observable.
     this.imgsRef = collection(this.db, `projects/${this.id}/images`);
-    this.images$ = collectionData(this.imgsRef).pipe(
-      map((docs) => docs.map((doc): Image => doc.data))
-    );
+    this.images$ = collectionData(this.imgsRef);
     this.project$
       .pipe(
         tap((project) => {
@@ -102,8 +100,9 @@ export class ProjectFormComponent implements OnInit {
 
   public async deleteImgAndRepositionImages(img: Image) {
     await this.deleteImg(img);
-    this.openSnackBar('Image supprimée !');
     await this.repositionImagesAfterDeletion(img);
+
+    this.openSnackBar('Image supprimée !');
   }
 
   private async deleteImg(img: Image): Promise<void> {
@@ -112,19 +111,28 @@ export class ProjectFormComponent implements OnInit {
     const storageDelete = deleteObject(imgStorageRef);
 
     // Deletes on Firestore.
-    const imgFirestoreRef = doc(this.db, `${this.imgsRef}/${img.id}`);
+    const imgFirestoreRef = doc(
+      this.db,
+      `projects/${this.id}/images/${img.id}`
+    );
     const firestoreDelete = deleteDoc(imgFirestoreRef);
 
-    Promise.all([firestoreDelete, storageDelete]);
+    // Updates image count.
+    const projectUpdate = updateDoc(this.projectRef, {
+      imageCount: increment(-1),
+    });
+
+    Promise.all([firestoreDelete, storageDelete, projectUpdate]);
   }
 
   // Repositions remaining images.
   private async repositionImagesAfterDeletion(img: Image) {
-    if (!img.position) return console.log("Position de l'image non définie.");
     let images = await this.projectImages();
 
+    if (images.length === 0) return;
+
     images = this.sortByPosition(images);
-    images.splice(img.position, 1);
+    images.splice(img.position!, 1);
 
     const batch = this.updateImgPositions(images);
 
@@ -157,7 +165,7 @@ export class ProjectFormComponent implements OnInit {
     const batch = writeBatch(this.db);
 
     for (let i = 0; i < images.length; i++) {
-      const imgRef = doc(this.db, `${this.imgsRef}/${images[i].id}`);
+      const imgRef = doc(this.db, `projects/${this.id}/images/${images[i].id}`);
       batch.update(imgRef, {
         position: i,
       });
@@ -167,14 +175,13 @@ export class ProjectFormComponent implements OnInit {
 
   // Updates an image position upward or downard.
   public async moveImage(img: Image, operation: 1 | -1) {
-    if (!img.position) return console.log("Position de l'image non définie");
     let images = await this.projectImages();
 
     images = this.sortByPosition(images);
     // Removes the moving image.
-    images.splice(img.position, 1);
+    images.splice(img.position!, 1);
     // Insert it 1 position before.
-    images.splice(img.position - operation, 0, img);
+    images.splice(img.position! - operation, 0, img);
     const batch = this.updateImgPositions(images);
     batch.commit();
   }

@@ -1,8 +1,10 @@
 // Angular
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 // Rxjs
 import { Observable, Subscription } from 'rxjs';
+
 // Angularfire
 import {
   Storage,
@@ -11,9 +13,17 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from '@angular/fire/storage';
-import { Firestore, setDoc } from '@angular/fire/firestore';
-import { doc, getDoc } from 'firebase/firestore';
+import {
+  Firestore,
+  doc,
+  getDoc,
+  collection,
+  runTransaction,
+} from '@angular/fire/firestore';
+
+// Models
 import { Image } from 'src/app/models';
+import { addDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-upload-task',
@@ -44,10 +54,6 @@ export class UploadTaskComponent implements OnInit {
 
   async startUpload() {
     if (!this.id || !this.file) return;
-    // Gets project doc.
-    const projectRef = doc(this.db, 'projects');
-    const project = await getDoc(projectRef);
-
     // Sets storage path.
     const path = `projects/${Date.now()}_${this.file.name}`;
 
@@ -83,12 +89,34 @@ export class UploadTaskComponent implements OnInit {
       },
       () => {
         // Upload completed successfully, saves ref on db.
-        getDownloadURL(this.uploadTask!.snapshot.ref).then((url) => {
-          const imageRef = doc(this.db, `projects/${this.id}/images`);
-          const image: Image = { url, path };
-          setDoc(imageRef, image);
+        getDownloadURL(this.uploadTask!.snapshot.ref).then(async (url) => {
+          await runTransaction(this.db, async (transaction) => {
+            // Reads image count to set position.
+            let position: number;
+            const projectRef = doc(this.db, `projects/${this.id}`);
+            const project = (await getDoc(projectRef)).data();
+
+            project!.imageCount
+              ? (position = project!.imageCount)
+              : (position = 0);
+
+            // Updates image count.
+            transaction.update(projectRef, { imageCount: position + 1 });
+
+            // Saves image to Firestore.
+            const id = this.randomId(18);
+            const imageRef = doc(this.db, `projects/${this.id}/images/${id}`);
+            const image: Image = { id, url, path, position };
+            transaction.set(imageRef, image);
+          });
         });
       }
     );
+  }
+
+  private randomId(idLength: number) {
+    return [...Array(idLength).keys()]
+      .map(() => Math.random().toString(36).substr(2, 1))
+      .join('');
   }
 }
