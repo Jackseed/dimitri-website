@@ -15,8 +15,14 @@ export class UploaderComponent {
   }
 
   onDrop(files: FileList) {
-    for (let i = 0; i < files.length; i++) {
-      this.files.push(files.item(i)!);
+    const sortedFiles = this.sortByName(files);
+    for (let file of sortedFiles) {
+      this.files.push(file);
     }
+  }
+
+  sortByName(files: FileList): File[] {
+    const arrayFiles = Array.from(files);
+    return arrayFiles.sort((a, b) => a.name.localeCompare(b.name));
   }
 }
