@@ -2,8 +2,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-// Rxjs
-import { Observable, Subscription } from 'rxjs';
+// Models
+import { Image } from 'src/app/models';
 
 // Angularfire
 import {
@@ -17,13 +17,11 @@ import {
   Firestore,
   doc,
   getDoc,
-  collection,
   runTransaction,
 } from '@angular/fire/firestore';
 
-// Models
-import { Image } from 'src/app/models';
-import { addDoc } from 'firebase/firestore';
+// Rxjs
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-upload-task',
@@ -54,13 +52,13 @@ export class UploadTaskComponent implements OnInit {
 
   async startUpload() {
     if (!this.id || !this.file) return;
-    // Sets storage path.
+    // Sets storage unique path.
     const path = `projects/${Date.now()}_${this.file.name}`;
 
     // Reference to storage bucket.
     const bucketRef = ref(this.storage, path);
 
-    // The main task
+    // Creates upload task.
     this.uploadTask = uploadBytesResumable(bucketRef, this.file);
 
     // Listens for state changes, errors, and completion of the upload.
