@@ -132,14 +132,7 @@ export class ProjectFormComponent implements OnInit {
     if (images.length === 0) return;
 
     images = this.sortByPosition(images);
-    images.splice(img.position!, 1);
-
     const batch = this.updateImgPositions(images);
-
-    // Updates project image count.
-    batch.update(this.projectRef, {
-      imageCount: increment(-1),
-    });
 
     batch.commit();
   }

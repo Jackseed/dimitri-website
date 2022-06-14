@@ -62,8 +62,12 @@
   <!---------------------   IMAGES  --------------------->
   <section *ngIf="images$ | async as images">
     <article *ngFor="let image of sortByPosition(images)">
-      <h3>Image {{ image.position! + 1 }}</h3>
-
+      <h3 *ngIf="!!!image.position && image.position !== 0">
+        En cours de positionnement...
+      </h3>
+      <h3 *ngIf="image.position || image.position === 0">
+        Image {{ image.position! + 1 }}
+      </h3>
       <button mat-icon-button (click)="moveImage(image, -1)">
         <mat-icon>arrow_downward</mat-icon>
       </button>
