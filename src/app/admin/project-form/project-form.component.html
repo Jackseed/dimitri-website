@@ -40,6 +40,9 @@
     <button mat-button type="submit" (click)="save()">Sauvegarder</button>
   </header>
   <!---------------------   FORM  --------------------->
+  <section class="vignette">
+    <app-uploader type="vignette"></app-uploader>
+  </section>
   <form [formGroup]="newProject" (ngSubmit)="onSubmit()">
     <h3>
       <mat-form-field class="titre">
@@ -57,7 +60,7 @@
   </form>
   <!-------------------   UPLOAD BOX  ------------------->
   <section class="upload-box">
-    <app-uploader></app-uploader>
+    <app-uploader type="image"></app-uploader>
   </section>
   <!---------------------   IMAGES  --------------------->
   <section *ngIf="images$ | async as images">
