@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable quotes */
 /* eslint-disable indent */
 /* eslint-disable import/no-duplicates */
@@ -13,7 +14,7 @@ const db = admin.firestore();
 export const positioningFunction = functions.firestore
   .document('projects/{projectId}/images/{imageId}')
   .onWrite(
-    (
+    async (
       change: Change<firebase.firestore.DocumentSnapshot>,
       context: EventContext
     ) => {
@@ -23,34 +24,35 @@ export const positioningFunction = functions.firestore
       const projectRef: firebase.firestore.DocumentReference = db
         .collection('projects')
         .doc(projectId);
-      if (!change.before.exists) {
-        const imageRef = projectRef.collection('images').doc(imageId);
+      if (change.before.exists) return;
+      // Doesn't give position to vignette
+      const imageRef = projectRef.collection('images').doc(imageId);
+      const img = (await imageRef.get()).data();
+      if (img!.type === 'vignette') return;
 
-        return db.runTransaction(
-          async (transaction: firebase.firestore.Transaction) => {
-            const project = (await transaction.get(projectRef)).data();
+      // Saves image position & updates project image count.
+      return db.runTransaction(
+        async (transaction: firebase.firestore.Transaction) => {
+          const project = (await transaction.get(projectRef)).data();
 
-            let position = project?.imageCount;
+          let position = project?.imageCount;
 
-            if (!position) {
-              position = 0;
-            }
-
-            transaction.update(projectRef, {
-              imageCount: position + 1,
-            });
-
-            transaction.set(
-              imageRef,
-              {
-                position,
-              },
-              { merge: true }
-            );
+          if (!position) {
+            position = 0;
           }
-        );
-      } else {
-        return 0;
-      }
+
+          transaction.update(projectRef, {
+            imageCount: position + 1,
+          });
+
+          transaction.set(
+            imageRef,
+            {
+              position,
+            },
+            { merge: true }
+          );
+        }
+      );
     }
   );

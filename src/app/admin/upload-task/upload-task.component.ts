@@ -48,7 +48,6 @@ export class UploadTaskComponent implements OnInit {
     if (!this.id || !this.file) return;
     // Sets storage unique path.
     const path = `projects/${Date.now()}_${this.file.name}`;
-    console.log(this.file.type);
 
     // Reference to storage bucket.
     const bucketRef = ref(this.storage, path);
