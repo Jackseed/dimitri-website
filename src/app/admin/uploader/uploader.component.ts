@@ -6,7 +6,8 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./uploader.component.scss'],
 })
 export class UploaderComponent {
-  @Input() type = '';
+  @Input()
+  type!: 'vignette' | 'image';
 
   public isHovering: boolean = false;
 
@@ -19,7 +20,10 @@ export class UploaderComponent {
   onDrop(files: FileList) {
     const sortedFiles = this.sortByName(files);
     for (let file of sortedFiles) {
-      this.files.push(file);
+      this.files.push({
+        ...file,
+        type: this.type,
+      });
     }
   }
 

@@ -48,6 +48,7 @@ export class UploadTaskComponent implements OnInit {
     if (!this.id || !this.file) return;
     // Sets storage unique path.
     const path = `projects/${Date.now()}_${this.file.name}`;
+    console.log(this.file.type);
 
     // Reference to storage bucket.
     const bucketRef = ref(this.storage, path);
@@ -83,7 +84,12 @@ export class UploadTaskComponent implements OnInit {
         getDownloadURL(this.uploadTask!.snapshot.ref).then(async (url) => {
           const id = this.randomId(18);
           const imageRef = doc(this.db, `projects/${this.id}/images/${id}`);
-          const image: Image = { id: imageRef.id, url, path };
+          const image: Image = {
+            id: imageRef.id,
+            url,
+            path,
+            type: this.file!.type as 'vignette' | 'image',
+          };
           setDoc(imageRef, image);
         });
       }
