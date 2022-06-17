@@ -81,6 +81,7 @@ export class UploadTaskComponent implements OnInit {
       () => {
         // Upload completed successfully, saves ref on db.
         getDownloadURL(this.uploadTask!.snapshot.ref).then(async (url) => {
+          console.log(url)
           const id = this.randomId(18);
           const imageRef = doc(this.db, `projects/${this.id}/images/${id}`);
           const image: Image = {

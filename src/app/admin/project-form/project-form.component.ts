@@ -38,7 +38,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 // Rxjs
 import { Observable } from 'rxjs';
-import { tap, first } from 'rxjs/operators';
+import { tap, first, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-project-form',
@@ -55,6 +55,8 @@ export class ProjectFormComponent implements OnInit {
     description: new FormControl(''),
   });
   private id: string;
+  public isVignetteUploaded$: Observable<boolean>;
+  public vignette$: Observable<Image>;
 
   constructor(
     private router: Router,
@@ -80,6 +82,13 @@ export class ProjectFormComponent implements OnInit {
         first()
       )
       .subscribe();
+    this.isVignetteUploaded$ = this.images$.pipe(
+      map((images) => !!images.filter((img) => img.type === 'vignette')[0])
+    );
+    this.vignette$ = this.images$.pipe(
+      map((images) => images.filter((img) => img.type === 'vignette')[0])
+    );
+    this.vignette$.subscribe(console.log);
   }
 
   ngOnInit(): void {}
