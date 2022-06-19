@@ -1,9 +1,18 @@
 <div class="container" fxLayout="column" fxLayoutAlign="start start">
-  <header fxFlex="15">
-    <nav fxFlexFill>
-      <a href="/"><img src="../assets/logo.png" /></a>
+  <header fxFlex="10" fxFlexFill>
+    <nav fxFlexFill fxFlexAlign="start">
+      <a href="/"><img id="logo" src="../assets/logo.png" /></a>
     </nav>
   </header>
+  <section fxFlex="5" fxFlexFill>
+    <nav fxFlexFill fxLayout="row">
+      <a href="/"
+        ><img class="social" src="../assets/mail.png" routerLink="/admin"
+      /></a>
+      <a href="/"><img class="social" src="../assets/insta.png" /></a>
+      <a href="/"><img class="social" src="../assets/pinterest.png" /></a>
+    </nav>
+  </section>
   <main fxFlex="85" fxFlexFill>
     <router-outlet></router-outlet>
   </main>

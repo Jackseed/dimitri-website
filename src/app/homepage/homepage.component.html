@@ -1,11 +1,4 @@
-<div fxFlexFill fxLayout="column" fxLayoutAlign="start start">
-  <header fxFlexFill fxFlex="8">
-    <nav fxFlexFill fxLayout="row">
-      <a href="/"><img src="../assets/mail.png" routerLink="/admin" /></a>
-      <a href="/"><img src="../assets/insta.png" /></a>
-      <a href="/"><img src="../assets/pinterest.png" /></a>
-    </nav>
-  </header>
+<div fxFlexFill>
   <main class="container" fxFlexAlign="center" fxFlex="92">
     <mat-grid-list [cols]="grid.cols" [gutterSize]="grid.gutterSize">
       <mat-grid-tile *ngFor="let image of images">
