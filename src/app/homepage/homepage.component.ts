@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MediaChange, MediaObserver } from '@angular/flex-layout';
+import { Subscription } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Grid, Image } from '../models';
 
 @Component({
@@ -58,8 +61,26 @@ export class HomepageComponent implements OnInit {
       projectId: 'fesses',
     },
   ];
+  watcher: Subscription;
+  activeMediaQuery = '';
 
-  constructor() {}
-
+  constructor(private mediaObserver: MediaObserver) {
+    this.watcher = mediaObserver
+      .asObservable()
+      .pipe(
+        filter((changes: MediaChange[]) => changes.length > 0),
+        map((changes: MediaChange[]) => changes[0])
+      )
+      .subscribe((change: MediaChange) => {
+        this.activeMediaQuery = change
+          ? `'${change.mqAlias}' = (${change.mediaQuery})`
+          : '';
+        if (change.mqAlias === 'xs') {
+          this.grid = { cols: 2, gutterSize: '20' };
+        } else {
+          this.grid = { cols: 3, gutterSize: '20' };
+        }
+      });
+  }
   ngOnInit(): void {}
 }
