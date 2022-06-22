@@ -1,19 +1,22 @@
-<div class="container" fxLayout="column" fxLayoutAlign="start start">
-  <header fxFlex="10" fxFlexFill>
-    <nav fxFlexFill fxFlexAlign="start">
+<div class="app-container" fxLayout="column" fxLayoutAlign="start start">
+  <header fxFlex="5" fxFlexFill>
+    <nav>
       <a href="/"><img id="logo" src="../assets/logo.png" /></a>
     </nav>
-  </header>
-  <section fxFlex="5" fxFlexFill>
-    <nav fxFlexFill fxLayout="row">
-      <a href="/"
-        ><img class="social" src="../assets/mail.png" routerLink="/admin"
-      /></a>
-      <a href="/"><img class="social" src="../assets/insta.png" /></a>
-      <a href="/"><img class="social" src="../assets/pinterest.png" /></a>
+    <nav fxFlexFill fxLayout="row" id="social">
+      <button mat-icon-button>
+        <mat-icon>home</mat-icon>
+      </button>
+      <button mat-icon-button>
+        <mat-icon>favorite</mat-icon>
+      </button>
+      <button mat-icon-button>
+        <mat-icon>more_vert</mat-icon>
+      </button>
     </nav>
-  </section>
-  <main fxFlex="85" fxFlexFill>
+  </header>
+
+  <main fxFlex="95" fxFlexFill>
     <router-outlet></router-outlet>
   </main>
 </div>

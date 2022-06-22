@@ -2,12 +2,12 @@
 
 html {
   height: 100%;
+  width: 100%;
 }
 body {
-  height: calc(100% - 2rem);
-  margin-top: 2rem;
-  margin-right: 12rem;
-  margin-left: 12rem;
+  height: 100%;
+  width: 100%;
+  margin: 0;
 }
 
 h1 {
@@ -32,6 +32,14 @@ span {
   }
   @include layout-bp(xl) {
     font-size: 12px;
+  }
+}
+
+.app-container {
+  width: 680px;
+  margin: 0 auto;
+  @include layout-bp(lt-sm) {
+    width: 100%;
   }
 }
 
