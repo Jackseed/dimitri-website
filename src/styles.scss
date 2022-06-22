@@ -23,6 +23,8 @@ p {
 }
 
 span {
+  font-family: "Roboto", "Helvetica", sans-serif;
+  font-weight: 100;
   font-size: 12px;
   @include layout-bp(xs) {
     font-size: 14px;
@@ -36,15 +38,11 @@ span {
 }
 
 .app-container {
-  width: 680px;
+  width: 620px;
+  height: 100%;
   margin: 0 auto;
   @include layout-bp(lt-sm) {
     width: 100%;
   }
 }
 
-.container {
-  height: 100%;
-  width: 87.5%;
-  margin: 0 auto;
-}
