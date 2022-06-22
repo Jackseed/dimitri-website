@@ -3,8 +3,8 @@
     <nav>
       <a href="/"><img id="logo" src="../assets/logo.png" /></a>
     </nav>
-    <nav  fxLayout="row" id="social">
-      <button mat-icon-button>
+    <nav fxLayout="row" id="social" fxLayoutAlign="start center">
+      <button mat-icon-button (click)="toggleEmail()">
         <mat-icon>home</mat-icon>
       </button>
       <button mat-icon-button>
@@ -13,6 +13,7 @@
       <button mat-icon-button>
         <mat-icon>more_vert</mat-icon>
       </button>
+      <span *ngIf="emailVisible">dimitri.grangeon@gmail.com</span>
     </nav>
   </header>
 
