@@ -40,16 +40,14 @@
     <button mat-button type="submit" (click)="save()">Sauvegarder</button>
   </header>
   <!---------------------   FORM  --------------------->
-  <section
-    class="vignette"
-    *ngIf="!(isVignetteUploaded$ | async); else noVignette"
-  >
-    <app-uploader type="vignette"></app-uploader>
+  <section *ngIf="isVignetteUploaded$ | async; else noVignette">
+    <div *ngIf="vignette$ | async as image" class="vignette">
+      <img fxFlexFill src="{{ image.url }}" />
+    </div>
   </section>
   <ng-template #noVignette>
-    <div *ngIf="vignette$ | async as image">
-      <img src="{{ image.url }}" /></div
-  ></ng-template>
+    <app-uploader class="vignette" type="vignette"></app-uploader>
+  </ng-template>
   <form [formGroup]="newProject" (ngSubmit)="onSubmit()">
     <h3>
       <mat-form-field class="titre">

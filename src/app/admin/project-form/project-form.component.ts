@@ -187,7 +187,6 @@ export class ProjectFormComponent implements OnInit {
     batch.commit();
   }
 
-  // TODO: delete vignette?
   public async deleteProject() {
     // First, deletes nested images.
     let images = await this.projectImages();
@@ -226,6 +225,7 @@ export class ProjectFormComponent implements OnInit {
     this.location.back();
   }
 
+  // Delete a project confirmation dialog.
   openDialog(): void {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
