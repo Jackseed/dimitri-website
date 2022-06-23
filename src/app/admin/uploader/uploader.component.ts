@@ -20,10 +20,7 @@ export class UploaderComponent {
   onDrop(files: FileList) {
     const sortedFiles = this.sortByName(files);
     for (let file of sortedFiles) {
-      this.files.push({
-        ...file,
-        type: this.type,
-      });
+      this.files.push(file);
     }
   }
 

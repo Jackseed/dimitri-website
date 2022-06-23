@@ -25,6 +25,7 @@ import { Observable } from 'rxjs';
 })
 export class UploadTaskComponent implements OnInit {
   @Input() file: File | undefined;
+  @Input() type: 'vignette' | 'image' | undefined;
   @Input() i: number | undefined;
 
   uploadTask: UploadTask | undefined;
@@ -51,7 +52,6 @@ export class UploadTaskComponent implements OnInit {
 
     // Reference to storage bucket.
     const bucketRef = ref(this.storage, path);
-
     // Creates upload task.
     this.uploadTask = uploadBytesResumable(bucketRef, this.file);
 
@@ -81,14 +81,13 @@ export class UploadTaskComponent implements OnInit {
       () => {
         // Upload completed successfully, saves ref on db.
         getDownloadURL(this.uploadTask!.snapshot.ref).then(async (url) => {
-          console.log(url)
           const id = this.randomId(18);
           const imageRef = doc(this.db, `projects/${this.id}/images/${id}`);
           const image: Image = {
             id: imageRef.id,
             url,
             path,
-            type: this.file!.type as 'vignette' | 'image',
+            type: this.type,
           };
           setDoc(imageRef, image);
         });

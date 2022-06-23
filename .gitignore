@@ -44,5 +44,6 @@ testem.log
 .DS_Store
 Thumbs.db
 .angular
-public
-.firebase
+public/*
+.firebase/*
+firebase-debug.log
