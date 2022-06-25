@@ -23,3 +23,19 @@
   float: right;
   display: inline;
 }
+
+#deleteVignette {
+  z-index: 2;
+  position: absolute;
+  top: 35%;
+  left: 75%;
+  opacity: 0;
+}
+
+#img-container:hover + #deleteVignette {
+  opacity: 1;
+}
+
+#deleteVignette:hover {
+  opacity: 1;
+}

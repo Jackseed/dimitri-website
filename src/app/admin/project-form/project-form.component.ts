@@ -106,6 +106,14 @@ export class ProjectFormComponent implements OnInit {
     this.openSnackBar('Projet sauvegardé !');
   }
 
+  public async deleteVignette() {
+    let images = await this.projectImages();
+    const vignette = images.filter((image) => (image.type = 'vignette'))[0];
+    await this.deleteImg(vignette);
+
+    this.openSnackBar('Vignette supprimée !');
+  }
+
   public async deleteImgAndRepositionImages(img: Image) {
     await this.deleteImg(img);
     await this.repositionImagesAfterDeletion(img);

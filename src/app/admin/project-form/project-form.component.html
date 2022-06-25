@@ -42,7 +42,14 @@
   <!---------------------   FORM  --------------------->
   <section *ngIf="isVignetteUploaded$ | async; else noVignette">
     <div *ngIf="vignette$ | async as image" class="vignette">
-      <img fxFlexFill src="{{ image.url }}" />
+      <img id="img-container" fxFlexFill src="{{ image.url }}" />
+      <button
+        id="deleteVignette"
+        mat-icon-button
+        (click)="deleteVignette()"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
   </section>
   <ng-template #noVignette>
