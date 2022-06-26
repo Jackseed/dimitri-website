@@ -12,11 +12,7 @@
     (cdkDropListDropped)="drop()"
   >
     <div cdkDrag ngClass.gt-sm="tiles" ngClass.lt-md="mobile-tiles">
-      <img
-        class="tiles"
-        src="{{ vignette.downloadUrl }}"
-        (click)="navigateProject(vignette.projectId)"
-      />
+      <img class="tiles" src="{{ vignette.url }}" />
     </div>
   </div>
 </div>

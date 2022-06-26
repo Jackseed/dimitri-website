@@ -37,10 +37,9 @@ import {
   styleUrls: ['./vignette-list.component.scss'],
 })
 export class VignetteListComponent implements OnInit, OnDestroy {
-  @ViewChild(CdkDropListGroup) listGroup:
-    | CdkDropListGroup<CdkDropList>
-    | undefined;
-  @ViewChild(CdkDropList) placeholder: CdkDropList | undefined;
+  @ViewChild(CdkDropListGroup) listGroup!: CdkDropListGroup<CdkDropList>;
+  @ViewChild(CdkDropList)
+  placeholder!: CdkDropList;
 
   public grid: Grid | undefined;
   private watcher: Subscription;
@@ -93,9 +92,13 @@ export class VignetteListComponent implements OnInit, OnDestroy {
   async getVignettes() {
     const vignettesSnapshot = await getDocs(this.vignetteQuery);
     vignettesSnapshot.forEach((vignetteDoc) => {
+      console.log(vignetteDoc);
       this.vignettes.push(vignetteDoc.data());
     });
 
+    for (var doc in vignettesSnapshot.docs) {
+      console.log(doc);
+    }
     //this.vignettes.sort((a, b) => a.position - b.position);
   }
 
@@ -136,12 +139,12 @@ export class VignetteListComponent implements OnInit, OnDestroy {
   enter = (drag: CdkDrag, drop: CdkDropList) => {
     if (drop === this.placeholder) return true;
 
-    if (!this.placeholder) return;
+    if (!this.placeholder) return true;
 
     const phElement = this.placeholder.element.nativeElement;
     const dropElement = drop.element.nativeElement;
 
-    if (!dropElement.parentNode) return;
+    if (!dropElement.parentNode) return true;
 
     const dragIndex = this.__indexOf(
       dropElement.parentNode.children,
@@ -157,7 +160,7 @@ export class VignetteListComponent implements OnInit, OnDestroy {
       this.source = drag.dropContainer;
 
       const sourceElement = this.source.element.nativeElement;
-      if (!sourceElement.parentNode) return;
+      if (!sourceElement.parentNode) return true;
 
       phElement.style.width = sourceElement.clientWidth + 'px';
       phElement.style.height = sourceElement.clientHeight + 'px';
