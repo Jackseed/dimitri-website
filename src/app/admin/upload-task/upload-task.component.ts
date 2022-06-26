@@ -18,6 +18,9 @@ import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 // Rxjs
 import { Observable } from 'rxjs';
 
+// Angular Material
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-upload-task',
   templateUrl: './upload-task.component.html',
@@ -37,7 +40,8 @@ export class UploadTaskComponent implements OnInit {
   constructor(
     private storage: Storage,
     private db: Firestore,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -90,6 +94,7 @@ export class UploadTaskComponent implements OnInit {
             type: this.type,
           };
           setDoc(imageRef, image);
+          this.openSnackBar('Image sauvegardée 👇');
         });
       }
     );
@@ -99,5 +104,11 @@ export class UploadTaskComponent implements OnInit {
     return [...Array(idLength).keys()]
       .map(() => Math.random().toString(36).substr(2, 1))
       .join('');
+  }
+
+  private openSnackBar(message: string) {
+    this.snackBar.open(message, 'Fermer', {
+      duration: 3000,
+    });
   }
 }
