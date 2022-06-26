@@ -1,18 +1,15 @@
-<header>
-  <h1>Bottom series</h1>
-  <p>
-    Voici une série de dessins libres autour des fesses et du corps feminin.
-  </p>
-  <p>
-    Réalisée avec divers techniques, je la poursuis aujourd’hui depuis 2016.
-  </p>
-  <p>
-    Je m’intéresse à toutes les physionomies, utilisant des techniques adaptées
-    à chacune.
-  </p>
-</header>
-<main>
-  <div *ngFor="let image of images">
-    <img src="{{ image.url }}" />
-  </div>
-</main>
+<div *ngIf="project$ | async as project">
+  <header>
+    <h1>{{ project.title }}</h1>
+    <div *ngFor="let description of project.descriptions">
+      <p>
+        {{ description }}
+      </p>
+    </div>
+  </header>
+  <main>
+    <div *ngFor="let image of images$ | async">
+      <img src="{{ image.url }}" />
+    </div>
+  </main>
+</div>

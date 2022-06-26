@@ -10,5 +10,9 @@ p {
 img {
   width: 100%;
   object-fit: contain;
-  margin-top: 8rem;
+  margin-top: 12px;
+}
+
+img:last-of-type {
+  margin-bottom: 12px;
 }

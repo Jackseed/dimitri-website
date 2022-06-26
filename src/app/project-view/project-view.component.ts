@@ -1,5 +1,23 @@
+// Angular
 import { Component, OnInit } from '@angular/core';
-import { Image } from '../models';
+import { ActivatedRoute } from '@angular/router';
+
+// Components
+import { Image, Project } from '../models';
+
+// Angularfire
+import {
+  collection,
+  collectionData,
+  CollectionReference,
+  doc,
+  docData,
+  DocumentReference,
+  Firestore,
+} from '@angular/fire/firestore';
+
+// Rxjs
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-project-view',
@@ -11,7 +29,21 @@ export class ProjectViewComponent implements OnInit {
     { url: '../../assets/fesses1.png' },
     { url: '../../assets/fesses2.png' },
   ];
-  constructor() {}
+  private projectRef: DocumentReference;
+  public project$: Observable<Project>;
+  private imgsRef: CollectionReference;
+  public images$: Observable<Image[]>;
+  private id: string;
+
+  constructor(private db: Firestore, private route: ActivatedRoute) {
+    this.id = this.route.snapshot.paramMap.get('id')!;
+    // Sets project observable.
+    this.projectRef = doc(this.db, `projects/${this.id}`);
+    this.project$ = docData(this.projectRef);
+    // Sets images observable.
+    this.imgsRef = collection(this.db, `projects/${this.id}/images`);
+    this.images$ = collectionData(this.imgsRef);
+  }
 
   ngOnInit(): void {}
 }

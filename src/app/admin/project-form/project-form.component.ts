@@ -47,8 +47,8 @@ import { tap, first, map } from 'rxjs/operators';
 })
 export class ProjectFormComponent implements OnInit {
   private projectRef: DocumentReference;
-  private imgsRef: CollectionReference;
   public project$: Observable<Project>;
+  private imgsRef: CollectionReference;
   public images$: Observable<Image[]>;
   public newProject = new FormGroup({
     title: new FormControl(''),
