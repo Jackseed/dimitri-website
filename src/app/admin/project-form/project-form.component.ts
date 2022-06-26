@@ -93,7 +93,9 @@ export class ProjectFormComponent implements OnInit {
     this.project$
       .pipe(
         tap((project) => {
-          if (!project.descriptions) return;
+          // If there is no description yet, iniatializes it with an empty string.
+          if (!project.descriptions)
+            return this.descriptions.push(new FormControl(''));
           for (const description of project.descriptions!) {
             this.descriptions.push(new FormControl(description));
           }

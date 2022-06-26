@@ -59,17 +59,17 @@
       </mat-form-field>
     </h3>
 
-    <button mat-button (click)="addDescription()">
-      Ajouter une description
+    <button mat-stroked-button (click)="addDescription()">
+      Ajouter une ligne de description
     </button>
     <ng-container formArrayName="descriptions">
       <p *ngFor="let control of descriptions.controls; index as i">
         <mat-form-field class="description">
-          <mat-label>Description</mat-label>
-          <textarea matInput type="text" [formControlName]="i"></textarea>
+          <mat-label>Description (ligne {{ i + 1 }})</mat-label>
+          <input matInput type="text" [formControlName]="i" />
         </mat-form-field>
-        <button mat-button (click)="removeDescription(i)">
-          Retirer la description
+        <button mat-icon-button (click)="removeDescription(i)">
+          <mat-icon>delete</mat-icon>
         </button>
       </p>
     </ng-container>
