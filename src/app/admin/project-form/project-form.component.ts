@@ -57,6 +57,7 @@ export class ProjectFormComponent implements OnInit {
   private id: string;
   public isVignetteUploaded$: Observable<boolean>;
   public vignette$: Observable<Image>;
+  public projectImages$: Observable<Image[]>;
 
   constructor(
     private router: Router,
@@ -73,7 +74,10 @@ export class ProjectFormComponent implements OnInit {
     this.project$ = docData(this.projectRef);
     // Sets images observable.
     this.imgsRef = collection(this.db, `projects/${this.id}/images`);
-    this.images$ = collectionData(this.imgsRef);
+    this.projectImages$ = collectionData(this.imgsRef);
+    this.images$ = this.projectImages$.pipe(
+      map((images) => images.filter((image) => image.type === 'image'))
+    );
     this.project$
       .pipe(
         tap((project) => {
@@ -82,10 +86,10 @@ export class ProjectFormComponent implements OnInit {
         first()
       )
       .subscribe();
-    this.isVignetteUploaded$ = this.images$.pipe(
+    this.isVignetteUploaded$ = this.projectImages$.pipe(
       map((images) => !!images.filter((img) => img.type === 'vignette')[0])
     );
-    this.vignette$ = this.images$.pipe(
+    this.vignette$ = this.projectImages$.pipe(
       map((images) => images.filter((img) => img.type === 'vignette')[0])
     );
   }
@@ -109,6 +113,7 @@ export class ProjectFormComponent implements OnInit {
   public async deleteVignette() {
     let images = await this.projectImages();
     const vignette = images.filter((image) => (image.type = 'vignette'))[0];
+    console.log('vignette being deleted: ', vignette);
     await this.deleteImg(vignette);
 
     this.openSnackBar('Vignette supprimée !');
@@ -132,6 +137,12 @@ export class ProjectFormComponent implements OnInit {
       `projects/${this.id}/images/${img.id}`
     );
     const firestoreDelete = deleteDoc(imgFirestoreRef);
+
+    // If it's a vignette, doesn't update image count.
+    if (img.type === 'vignette') {
+      Promise.all([firestoreDelete, storageDelete]);
+      return;
+    }
 
     // Updates image count.
     const projectUpdate = updateDoc(this.projectRef, {

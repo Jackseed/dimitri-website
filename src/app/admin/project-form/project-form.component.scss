@@ -13,13 +13,15 @@
 }
 
 .upload-box {
+  padding-top: 40px;
   height: 300px;
-  padding-bottom: 30px;
+  padding-bottom: 40px;
 }
 
 .vignette {
-  width: 20vw;
-  height: 20vw;
+  position: relative;
+  width: max(200px, 15vw);
+  height: max(200px, 15vw);
   float: right;
   display: inline;
 }
@@ -27,8 +29,8 @@
 #deleteVignette {
   z-index: 2;
   position: absolute;
-  top: 35%;
-  left: 75%;
+  top: 40%;
+  left: 40%;
   opacity: 0;
 }
 
@@ -38,4 +40,9 @@
 
 #deleteVignette:hover {
   opacity: 1;
+}
+
+.project-images {
+  width: 100%;
+  object-fit: contain;
 }

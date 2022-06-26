@@ -43,11 +43,7 @@
   <section *ngIf="isVignetteUploaded$ | async; else noVignette">
     <div *ngIf="vignette$ | async as image" class="vignette">
       <img id="img-container" fxFlexFill src="{{ image.url }}" />
-      <button
-        id="deleteVignette"
-        mat-icon-button
-        (click)="deleteVignette()"
-      >
+      <button id="deleteVignette" mat-icon-button (click)="deleteVignette()">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -92,9 +88,7 @@
       <button mat-icon-button (click)="deleteImgAndRepositionImages(image)">
         <mat-icon>delete</mat-icon>
       </button>
-      <div>
-        <img src="{{ image.url }}" />
-      </div>
+      <img class="project-images" src="{{ image.url }}" />
     </article>
   </section>
 </div>
