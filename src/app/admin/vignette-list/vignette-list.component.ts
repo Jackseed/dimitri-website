@@ -20,7 +20,16 @@ import { MediaObserver, MediaChange } from '@angular/flex-layout';
 
 // Angular Material
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Firestore } from '@angular/fire/firestore';
+
+// Angularfire
+import {
+  Firestore,
+  query,
+  collectionGroup,
+  where,
+  getDocs,
+  collectionData,
+} from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-vignette-list',
@@ -36,6 +45,10 @@ export class VignetteListComponent implements OnInit, OnDestroy {
   public grid: Grid | undefined;
   private watcher: Subscription;
   private activeMediaQuery = '';
+  private vignetteQuery = query(
+    collectionGroup(this.db, 'images'),
+    where('type', '==', 'vignette')
+  );
   public vignettes$: Observable<Image[]>;
   public vignettes: Image[] = [];
 
@@ -71,35 +84,19 @@ export class VignetteListComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.vignettes$ = this.db
-      .collection('vignettes')
-      .valueChanges()
-      .pipe(
-        map((vignettes: Image[]) =>
-          vignettes.sort((a, b) => a.position - b.position)
-        )
-      );
+    this.vignettes$ = collectionData(this.vignetteQuery);
     this.getVignettes();
   }
 
   ngOnInit(): void {}
 
   async getVignettes() {
-    await this.db
-      .collection('vignettes')
-      .get()
-      .toPromise()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          if (doc.exists) {
-            this.vignettes.push(doc.data());
-          }
-        });
-      })
-      .catch((error) => {
-        console.log('Error getting documents: ', error);
-      });
-    this.vignettes.sort((a, b) => a.position - b.position);
+    const vignettesSnapshot = await getDocs(this.vignetteQuery);
+    vignettesSnapshot.forEach((vignetteDoc) => {
+      this.vignettes.push(vignetteDoc.data());
+    });
+
+    //this.vignettes.sort((a, b) => a.position - b.position);
   }
 
   ngAfterViewInit() {
@@ -132,7 +129,7 @@ export class VignetteListComponent implements OnInit, OnDestroy {
 
     if (this.sourceIndex !== this.targetIndex) {
       moveItemInArray(this.vignettes, this.sourceIndex, this.targetIndex);
-      this.updatePosition(this.vignettes);
+      // this.updatePosition(this.vignettes);
     }
   }
 
@@ -191,7 +188,7 @@ export class VignetteListComponent implements OnInit, OnDestroy {
     return Array.prototype.indexOf.call(collection, node);
   }
 
-  private updatePosition(vignettes: Image[]) {
+  /*   private updatePosition(vignettes: Image[]) {
     console.log('updating position');
     const batch = this.db.firestore.batch();
     console.log(vignettes);
@@ -206,7 +203,7 @@ export class VignetteListComponent implements OnInit, OnDestroy {
     }
 
     batch.commit();
-  }
+  } */
 
   public navigateProject(projectId: string) {
     if (projectId) {
