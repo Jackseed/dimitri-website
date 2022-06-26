@@ -1,7 +1,10 @@
 <div class="container">
   <header fxFlexLayout="row" fxFlexAlign="center end" class="title-line">
     <h2 class="title" fxFlex>Liste des projets</h2>
-    <button fxFlex="nogrow" mat-button (click)="addProject()">
+    <button fxFlex="nogrow" mat-stroked-button (click)="goToVignettes()">
+      Gérer les vignettes
+    </button>
+    <button fxFlex="nogrow" mat-stroked-button (click)="addProject()">
       Ajouter un projet
     </button>
   </header>

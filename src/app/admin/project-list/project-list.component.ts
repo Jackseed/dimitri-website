@@ -32,4 +32,8 @@ export class ProjectListComponent implements OnInit {
 
     this.router.navigate([`admin/${docRef.id}/edit`]);
   }
+
+  public goToVignettes() {
+    this.router.navigate([`admin/vignettes`]);
+  }
 }

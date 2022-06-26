@@ -37,6 +37,7 @@ import { UploaderComponent } from './admin/uploader/uploader.component';
 import { UploadTaskComponent } from './admin/upload-task/upload-task.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { ConfirmationDialogComponent } from './admin/confirmation-dialog/confirmation-dialog.component';
+import { VignetteListComponent } from './admin/vignette-list/vignette-list.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { ConfirmationDialogComponent } from './admin/confirmation-dialog/confirm
     UploadTaskComponent,
     DropzoneDirective,
     ConfirmationDialogComponent,
+    VignetteListComponent,
   ],
   imports: [
     BrowserModule,
