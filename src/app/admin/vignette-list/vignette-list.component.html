@@ -1,1 +1,22 @@
-<p>vignette-list works!</p>
+<div class="container" cdkDropListGroup>
+  <div
+    cdkDropList
+    [cdkDropListEnterPredicate]="enter"
+    (cdkDropListDropped)="drop()"
+    #placeholder
+  ></div>
+  <div
+    cdkDropList
+    *ngFor="let vignette of vignettes"
+    [cdkDropListEnterPredicate]="enter"
+    (cdkDropListDropped)="drop()"
+  >
+    <div cdkDrag ngClass.gt-sm="tiles" ngClass.lt-md="mobile-tiles">
+      <img
+        class="tiles"
+        src="{{ vignette.downloadUrl }}"
+        (click)="navigateProject(vignette.projectId)"
+      />
+    </div>
+  </div>
+</div>
