@@ -1,6 +1,6 @@
 // Angular
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -52,12 +52,13 @@ export class ProjectFormComponent implements OnInit {
   public images$: Observable<Image[]>;
   public newProject = new FormGroup({
     title: new FormControl(''),
-    description: new FormControl(''),
+    descriptions: new FormArray<FormControl>([]),
   });
   private id: string;
   public isVignetteUploaded$: Observable<boolean>;
   public vignette$: Observable<Image>;
   public projectImages$: Observable<Image[]>;
+  public descriptions = this.newProject.get('descriptions') as FormArray;
 
   constructor(
     private router: Router,
@@ -78,6 +79,7 @@ export class ProjectFormComponent implements OnInit {
     this.images$ = this.projectImages$.pipe(
       map((images) => images.filter((image) => image.type === 'image'))
     );
+    // Sets form value.
     this.project$
       .pipe(
         tap((project) => {
@@ -86,6 +88,20 @@ export class ProjectFormComponent implements OnInit {
         first()
       )
       .subscribe();
+
+    // Loads descriptions
+    this.project$
+      .pipe(
+        tap((project) => {
+          if (!project.descriptions) return;
+          for (const description of project.descriptions!) {
+            this.descriptions.push(new FormControl(description));
+          }
+        }),
+        first()
+      )
+      .subscribe();
+    // Sets vignette.
     this.isVignetteUploaded$ = this.projectImages$.pipe(
       map((images) => !!images.filter((img) => img.type === 'vignette')[0])
     );
@@ -96,6 +112,14 @@ export class ProjectFormComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  public addDescription() {
+    this.descriptions.push(new FormControl(''));
+  }
+
+  public removeDescription(index: number) {
+    this.descriptions.removeAt(index);
+  }
+
   onSubmit() {}
   save() {
     setDoc(
@@ -103,7 +127,7 @@ export class ProjectFormComponent implements OnInit {
       {
         id: this.id,
         title: this.newProject.value.title,
-        description: this.newProject.value.description,
+        descriptions: this.newProject.value.descriptions,
       },
       { merge: true }
     );

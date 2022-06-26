@@ -59,12 +59,20 @@
       </mat-form-field>
     </h3>
 
-    <p>
-      <mat-form-field class="description">
-        <mat-label>Description</mat-label>
-        <textarea matInput type="text" formControlName="description"></textarea>
-      </mat-form-field>
-    </p>
+    <button mat-button (click)="addDescription()">
+      Ajouter une description
+    </button>
+    <ng-container formArrayName="descriptions">
+      <p *ngFor="let control of descriptions.controls; index as i">
+        <mat-form-field class="description">
+          <mat-label>Description</mat-label>
+          <textarea matInput type="text" [formControlName]="i"></textarea>
+        </mat-form-field>
+        <button mat-button (click)="removeDescription(i)">
+          Retirer la description
+        </button>
+      </p>
+    </ng-container>
   </form>
   <!-------------------   UPLOAD BOX  ------------------->
   <section class="upload-box">

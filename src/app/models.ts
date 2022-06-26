@@ -19,6 +19,6 @@ export interface Project {
   id?: string;
   position?: number;
   title?: string;
-  description?: string;
+  descriptions?: string[];
   status?: 'draft' | 'published';
 }
