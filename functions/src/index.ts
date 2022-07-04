@@ -25,25 +25,36 @@ export const positioningFunction = functions.firestore
         .collection('projects')
         .doc(projectId);
       if (change.before.exists) return;
-      // Doesn't give position to vignette
-      const imageRef = projectRef.collection('images').doc(imageId);
-      const img = (await imageRef.get()).data();
-      if (img!.type === 'vignette') return;
 
       // Saves image position & updates project image count.
       return db.runTransaction(
         async (transaction: firebase.firestore.Transaction) => {
-          const project = (await transaction.get(projectRef)).data();
+          let position;
 
-          let position = project?.imageCount;
+          const imageRef = projectRef.collection('images').doc(imageId);
+          const img = (await imageRef.get()).data();
+          // If it's a vignette, gets current position in _meta doc
+          if (img?.type === 'vignette') {
+            const metaRef: firebase.firestore.DocumentReference = db
+              .collection('projects')
+              .doc('_meta');
+            const meta = (await transaction.get(metaRef)).data();
+            position = meta?.totalVignettes;
+            transaction.update(metaRef, {
+              totalVignettes: position + 1,
+            });
+          } else {
+            const project = (await transaction.get(projectRef)).data();
+            position = project?.imageCount;
+
+            transaction.update(projectRef, {
+              imageCount: position + 1,
+            });
+          }
 
           if (!position) {
             position = 0;
           }
-
-          transaction.update(projectRef, {
-            imageCount: position + 1,
-          });
 
           transaction.set(
             imageRef,
