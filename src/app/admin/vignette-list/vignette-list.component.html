@@ -1,7 +1,9 @@
 <button mat-icon-button (click)="back()">
   <mat-icon>keyboard_backspace</mat-icon>
 </button>
-<div class="container" cdkDropListGroup>
+<h2>Ordre des vignettes</h2>
+<p>Drag & drop pour changer l'ordre (si buggy insister 😬)</p>
+<main class="container" cdkDropListGroup>
   <ng-container *ngFor="let vignette of vignettes$ | async; let i = index">
     <div
       cdkDropList
@@ -10,8 +12,12 @@
       [cdkDropListData]="{ item: vignette, index: i }"
     >
       <div cdkDrag class="tiles">
-        <img class="tiles" src="{{ vignette.url }}" />
+        <img
+          class="tiles"
+          src="{{ vignette.url }}"
+          (click)="navigateProject(vignette.projectId!)"
+        />
       </div>
     </div>
   </ng-container>
-</div>
+</main>

@@ -7,9 +7,6 @@ import { Location } from '@angular/common';
 // Components
 import { Image } from 'src/app/models';
 
-// Angular Material
-import { MatSnackBar } from '@angular/material/snack-bar';
-
 // Angularfire
 import {
   Firestore,
@@ -42,8 +39,7 @@ export class VignetteListComponent implements OnInit {
   constructor(
     private db: Firestore,
     private router: Router,
-    private location: Location,
-    private snackBar: MatSnackBar
+    private location: Location
   ) {
     this.getVignettes();
     this.vignettes$ = collectionData(this.vignetteQuery).pipe(
@@ -63,7 +59,7 @@ export class VignetteListComponent implements OnInit {
     });
   }
 
-  private updatePosition(vignettes: Image[]) {
+  private async updatePosition(vignettes: Image[]) {
     const batch = writeBatch(this.db);
 
     for (let i = 0; i < this.vignettes.length; i++) {
@@ -76,24 +72,14 @@ export class VignetteListComponent implements OnInit {
       });
     }
 
-    batch.commit();
+    await batch.commit();
   }
 
-  /*   public navigateProject(projectId: string) {
-    if (projectId) {
-      this.router.navigate([`/admin/${projectId}/view`]);
-    } else {
-      this.openSnackBar('Aucun projet associé (recharge la page ?)');
-    }
-  } */
-
-  /*   private openSnackBar(message: string) {
-    this.snackBar.open(message, 'Fermer', {
-      duration: 2000,
-    });
+  public navigateProject(projectId: string) {
+    this.router.navigate([`/admin/${projectId}/view`]);
   }
- */
-  drop(event: CdkDragDrop<any>) {
+
+  async drop(event: CdkDragDrop<any>) {
     let vignettes = this.vignettes;
     // Removes moving item from its old position.
     vignettes.splice(event.previousContainer.data.index, 1);
@@ -103,8 +89,8 @@ export class VignetteListComponent implements OnInit {
       0,
       event.previousContainer.data.item
     );
-    event.currentIndex = 0;
-    this.updatePosition(vignettes);
+
+    await this.updatePosition(vignettes);
   }
 
   back() {
