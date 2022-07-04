@@ -1,7 +1,7 @@
 <div fxFlexFill fxLayout="column">
   <main fxFlexFill fxFlex="90" fxFlexAlign="center">
     <mat-grid-list [cols]="grid.cols" [gutterSize]="grid.gutterSize">
-      <mat-grid-tile *ngFor="let image of images">
+      <mat-grid-tile *ngFor="let image of vignettes">
         <img
           routerLink="/{{ image.projectId }}"
           class="tiles pointer"
