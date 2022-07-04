@@ -1,19 +1,14 @@
 <div class="container" cdkDropListGroup>
-  <div
-    cdkDropList
-    *ngFor="let vignette of vignettes"
-    (cdkDropListDropped)="drop($event)"
-    (cdkDropListEntered)="enter($event, 0)"
-    #placeholder
-    [cdkDropListData]="vignettes"
-  >
+  <ng-container *ngFor="let vignette of vignettes; let i = index">
     <div
-      cdkDrag
-      (cdkDragStarted)="startDrag(0)"
-      ngClass.gt-sm="tiles"
-      ngClass.lt-md="mobile-tiles"
+      cdkDropList
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="drop($event)"
+      [cdkDropListData]="{ item: vignette, index: i }"
     >
-      <img class="tiles" src="{{ vignette.url }}" />
+      <div cdkDrag class="tiles">
+        <img class="tiles" src="{{ vignette.url }}" />
+      </div>
     </div>
-  </div>
+  </ng-container>
 </div>

@@ -6,24 +6,10 @@
   cursor: pointer;
 }
 
-.mobile-tiles {
-  width: 100%;
-}
 .container {
   display: flex;
   flex-wrap: wrap;
   width: 500px;
-}
-
-.container-sm {
-  margin-left: 5%;
-  margin-right: 5%;
-  margin-top: 5%;
-  width: 90%;
-}
-
-.container-xs {
-  width: 100%;
 }
 
 .cdk-drop-list {
@@ -45,8 +31,4 @@
 
 .cdk-drag-animating {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-button {
-  margin-right: 4px;
 }
