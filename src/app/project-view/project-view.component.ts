@@ -18,6 +18,7 @@ import {
 
 // Rxjs
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-project-view',
@@ -25,10 +26,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./project-view.component.scss'],
 })
 export class ProjectViewComponent implements OnInit {
-  public images: Image[] = [
-    { url: '../../assets/fesses1.png' },
-    { url: '../../assets/fesses2.png' },
-  ];
+  public images: Image[] = [];
   private projectRef: DocumentReference;
   public project$: Observable<Project>;
   private imgsRef: CollectionReference;
@@ -42,7 +40,9 @@ export class ProjectViewComponent implements OnInit {
     this.project$ = docData(this.projectRef);
     // Sets images observable.
     this.imgsRef = collection(this.db, `projects/${this.id}/images`);
-    this.images$ = collectionData(this.imgsRef);
+    this.images$ = collectionData(this.imgsRef).pipe(
+      map((images) => images.filter((image) => image.type === 'images'))
+    );
   }
 
   ngOnInit(): void {}
