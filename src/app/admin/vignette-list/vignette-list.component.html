@@ -1,17 +1,18 @@
 <div class="container" cdkDropListGroup>
   <div
     cdkDropList
-    [cdkDropListEnterPredicate]="enter"
-    (cdkDropListDropped)="drop()"
-    #placeholder
-  ></div>
-  <div
-    cdkDropList
     *ngFor="let vignette of vignettes"
-    [cdkDropListEnterPredicate]="enter"
-    (cdkDropListDropped)="drop()"
+    (cdkDropListDropped)="drop($event)"
+    (cdkDropListEntered)="enter($event, 0)"
+    #placeholder
+    [cdkDropListData]="vignettes"
   >
-    <div cdkDrag ngClass.gt-sm="tiles" ngClass.lt-md="mobile-tiles">
+    <div
+      cdkDrag
+      (cdkDragStarted)="startDrag(0)"
+      ngClass.gt-sm="tiles"
+      ngClass.lt-md="mobile-tiles"
+    >
       <img class="tiles" src="{{ vignette.url }}" />
     </div>
   </div>

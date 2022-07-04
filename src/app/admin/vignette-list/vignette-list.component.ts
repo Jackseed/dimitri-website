@@ -5,6 +5,8 @@ import {
   CdkDropListGroup,
   moveItemInArray,
   CdkDrag,
+  CdkDragEnter,
+  CdkDragDrop,
 } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
 
@@ -50,12 +52,12 @@ export class VignetteListComponent implements OnInit, OnDestroy {
   );
   public vignettes$: Observable<Image[]>;
   public vignettes: Image[] = [];
-
   public target: CdkDropList | null;
   public targetIndex: number | undefined;
   public source: CdkDropList | null;
   public sourceIndex: number | undefined;
-  public items: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  indexDrag: number = -1;
+  indexEnter: number = -1;
 
   constructor(
     private mediaObserver: MediaObserver,
@@ -92,103 +94,10 @@ export class VignetteListComponent implements OnInit, OnDestroy {
   async getVignettes() {
     const vignettesSnapshot = await getDocs(this.vignetteQuery);
     vignettesSnapshot.forEach((vignetteDoc) => {
-      console.log(vignetteDoc);
+      console.log('vignette data: ', vignetteDoc.data());
       this.vignettes.push(vignetteDoc.data());
     });
-
-    for (var doc in vignettesSnapshot.docs) {
-      console.log(doc);
-    }
     //this.vignettes.sort((a, b) => a.position - b.position);
-  }
-
-  ngAfterViewInit() {
-    const phElement = this.placeholder!.element.nativeElement;
-
-    phElement.style.display = 'none';
-    phElement.parentNode!.removeChild(phElement);
-  }
-
-  drop() {
-    if (!this.target || !this.placeholder) return;
-
-    const phElement = this.placeholder.element.nativeElement;
-    const parent = phElement.parentNode;
-
-    if (!parent || !this.source || !this.sourceIndex || !this.targetIndex)
-      return;
-
-    phElement.style.display = 'none';
-
-    parent.removeChild(phElement);
-    parent.appendChild(phElement);
-    parent.insertBefore(
-      this.source.element.nativeElement,
-      parent.children[this.sourceIndex]
-    );
-
-    this.target = null;
-    this.source = null;
-
-    if (this.sourceIndex !== this.targetIndex) {
-      moveItemInArray(this.vignettes, this.sourceIndex, this.targetIndex);
-      // this.updatePosition(this.vignettes);
-    }
-  }
-
-  enter = (drag: CdkDrag, drop: CdkDropList) => {
-    if (drop === this.placeholder) return true;
-
-    if (!this.placeholder) return true;
-
-    const phElement = this.placeholder.element.nativeElement;
-    const dropElement = drop.element.nativeElement;
-
-    if (!dropElement.parentNode) return true;
-
-    const dragIndex = this.__indexOf(
-      dropElement.parentNode.children,
-      drag.dropContainer.element.nativeElement
-    );
-    const dropIndex = this.__indexOf(
-      dropElement.parentNode.children,
-      dropElement
-    );
-
-    if (!this.source) {
-      this.sourceIndex = dragIndex;
-      this.source = drag.dropContainer;
-
-      const sourceElement = this.source.element.nativeElement;
-      if (!sourceElement.parentNode) return true;
-
-      phElement.style.width = sourceElement.clientWidth + 'px';
-      phElement.style.height = sourceElement.clientHeight + 'px';
-
-      sourceElement.parentNode.removeChild(sourceElement);
-    }
-
-    this.targetIndex = dropIndex;
-    this.target = drop;
-
-    phElement.style.display = '';
-    dropElement.parentNode.insertBefore(
-      phElement,
-      dragIndex < dropIndex ? dropElement.nextSibling : dropElement
-    );
-
-    this.source._dropListRef.start();
-    this.placeholder._dropListRef.enter(
-      drag._dragRef,
-      drag.element.nativeElement.offsetLeft,
-      drag.element.nativeElement.offsetTop
-    );
-
-    return false;
-  };
-
-  __indexOf(collection: any, node: any) {
-    return Array.prototype.indexOf.call(collection, node);
   }
 
   /*   private updatePosition(vignettes: Image[]) {
@@ -220,6 +129,49 @@ export class VignetteListComponent implements OnInit, OnDestroy {
     this.snackBar.open(message, 'Fermer', {
       duration: 2000,
     });
+  }
+
+  drop(event: CdkDragDrop<Image[]>) {
+    this.indexDrag = -1;
+    this.indexEnter = -1;
+    console.log('drop event container: ', event.container);
+    if (event.previousContainer === event.container) {
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    } else {
+      const currentIndex =
+        event.currentIndex == event.container.data.length
+          ? event.container.data.length - 1
+          : event.currentIndex;
+
+      //get the data we are dragging
+      const dataFrom = event.previousContainer.data[event.previousIndex];
+      //get the last element of the row where dropped
+      const dataTo = event.container.data[event.container.data.length - 1];
+
+      //remove the element dragged
+      event.previousContainer.data.splice(event.previousIndex, 1);
+      //Add at last the dataTo
+      event.previousContainer.data.unshift(dataTo);
+
+      //Add the data dragged
+      event.container.data.splice(currentIndex, 0, dataFrom);
+      //remove the last element
+      event.container.data.pop();
+    }
+  }
+  startDrag(index: number) {
+    this.indexDrag = index;
+  }
+
+  enter(event: CdkDragEnter<any>, index: number) {
+    this.indexEnter = index;
+    const data = event.container.data;
+    console.log('enter event container: ', event.container);
+    console.log('enter data: ', data);
   }
 
   ngOnDestroy() {
