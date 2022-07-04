@@ -65,7 +65,6 @@ export class VignetteListComponent implements OnInit {
 
   private updatePosition(vignettes: Image[]) {
     const batch = writeBatch(this.db);
-    console.log('updating position of vignettes: ', this.vignettes);
 
     for (let i = 0; i < this.vignettes.length; i++) {
       const vignetteRef = doc(
@@ -96,8 +95,14 @@ export class VignetteListComponent implements OnInit {
  */
   drop(event: CdkDragDrop<any>) {
     let vignettes = this.vignettes;
-    vignettes[event.previousContainer.data.index] = event.container.data.item;
-    vignettes[event.container.data.index] = event.previousContainer.data.item;
+    // Removes moving item from its old position.
+    vignettes.splice(event.previousContainer.data.index, 1);
+    // Then adds it to its new position.
+    vignettes.splice(
+      event.container.data.index,
+      0,
+      event.previousContainer.data.item
+    );
     event.currentIndex = 0;
     this.updatePosition(vignettes);
   }
