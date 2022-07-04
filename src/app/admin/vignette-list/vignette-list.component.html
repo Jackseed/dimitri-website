@@ -2,7 +2,7 @@
   <mat-icon>keyboard_backspace</mat-icon>
 </button>
 <div class="container" cdkDropListGroup>
-  <ng-container *ngFor="let vignette of vignettes; let i = index">
+  <ng-container *ngFor="let vignette of vignettes$ | async; let i = index">
     <div
       cdkDropList
       cdkDropListOrientation="horizontal"

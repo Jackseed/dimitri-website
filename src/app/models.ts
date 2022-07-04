@@ -5,8 +5,6 @@ export interface Grid {
 
 export interface Image {
   img?: string;
-  alt?: string;
-  link?: string;
   id?: string;
   url?: string;
   path?: string;

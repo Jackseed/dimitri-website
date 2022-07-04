@@ -92,9 +92,12 @@ export class UploadTaskComponent implements OnInit {
             url,
             path,
             type: this.type,
+            projectId: this.id,
           };
           setDoc(imageRef, image);
-          this.openSnackBar('Image sauvegardée 👇');
+          this.type === 'vignette'
+            ? this.openSnackBar('Vignette sauvegardée!')
+            : this.openSnackBar('Image sauvegardée 👇');
         });
       }
     );

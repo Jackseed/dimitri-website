@@ -17,7 +17,14 @@ import {
   collectionGroup,
   where,
   getDocs,
+  writeBatch,
+  doc,
+  collectionData,
 } from '@angular/fire/firestore';
+
+// Rxjs
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-vignette-list',
@@ -30,6 +37,7 @@ export class VignetteListComponent implements OnInit {
     where('type', '==', 'vignette')
   );
   public vignettes: Image[] = [];
+  public vignettes$: Observable<Image[]>;
 
   constructor(
     private db: Firestore,
@@ -38,55 +46,60 @@ export class VignetteListComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.getVignettes();
+    this.vignettes$ = collectionData(this.vignetteQuery).pipe(
+      map((vignettes) =>
+        vignettes.sort((a, b) => a.vignettePosition! - b.vignettePosition!)
+      )
+    );
   }
 
   ngOnInit(): void {}
 
   async getVignettes() {
+    this.vignettes = [];
     const vignettesSnapshot = await getDocs(this.vignetteQuery);
     vignettesSnapshot.forEach((vignetteDoc) => {
       this.vignettes.push(vignetteDoc.data());
     });
-    this.vignettes.sort((a, b) => a.vignettePosition! - b.vignettePosition!);
   }
 
-  /*   private updatePosition(vignettes: Image[]) {
-    console.log('updating position');
-    const batch = this.db.firestore.batch();
-    console.log(vignettes);
+  private updatePosition(vignettes: Image[]) {
+    const batch = writeBatch(this.db);
+    console.log('updating position of vignettes: ', this.vignettes);
 
-    for (let i = 0; i < vignettes.length; i++) {
-      batch.update(
-        this.db.firestore.collection('vignettes').doc(vignettes[i].id),
-        {
-          position: i,
-        }
+    for (let i = 0; i < this.vignettes.length; i++) {
+      const vignetteRef = doc(
+        this.db,
+        `projects/${vignettes[i].projectId}/images/${vignettes[i].id}`
       );
+      batch.update(vignetteRef, {
+        vignettePosition: i,
+      });
     }
 
     batch.commit();
-  } */
+  }
 
-  public navigateProject(projectId: string) {
+  /*   public navigateProject(projectId: string) {
     if (projectId) {
       this.router.navigate([`/admin/${projectId}/view`]);
     } else {
       this.openSnackBar('Aucun projet associé (recharge la page ?)');
     }
-  }
+  } */
 
-  private openSnackBar(message: string) {
+  /*   private openSnackBar(message: string) {
     this.snackBar.open(message, 'Fermer', {
       duration: 2000,
     });
   }
-
+ */
   drop(event: CdkDragDrop<any>) {
-    this.vignettes[event.previousContainer.data.index] =
-      event.container.data.item;
-    this.vignettes[event.container.data.index] =
-      event.previousContainer.data.item;
+    let vignettes = this.vignettes;
+    vignettes[event.previousContainer.data.index] = event.container.data.item;
+    vignettes[event.container.data.index] = event.previousContainer.data.item;
     event.currentIndex = 0;
+    this.updatePosition(vignettes);
   }
 
   back() {
