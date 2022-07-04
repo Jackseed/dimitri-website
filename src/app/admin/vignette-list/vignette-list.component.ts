@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 // Components
 import { Image } from 'src/app/models';
@@ -33,6 +34,7 @@ export class VignetteListComponent implements OnInit {
   constructor(
     private db: Firestore,
     private router: Router,
+    private location: Location,
     private snackBar: MatSnackBar
   ) {
     this.getVignettes();
@@ -85,5 +87,9 @@ export class VignetteListComponent implements OnInit {
     this.vignettes[event.container.data.index] =
       event.previousContainer.data.item;
     event.currentIndex = 0;
+  }
+
+  back() {
+    this.location.back();
   }
 }
