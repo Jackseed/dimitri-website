@@ -137,12 +137,16 @@ export class ProjectFormComponent implements OnInit {
   }
 
   public async deleteVignette() {
-    let images = await this.projectImages();
-    const vignette = images.filter((image) => (image.type = 'vignette'))[0];
-    console.log('vignette being deleted: ', vignette);
+    const vignette = await this.vignette();
     await this.deleteImg(vignette);
 
     this.openSnackBar('Vignette supprimée !');
+
+    // Updates vignette total on _meta
+    const metaRef = doc(this.db, `admin/_meta`);
+    updateDoc(metaRef, {
+      totalVignettes: increment(-1),
+    });
   }
 
   public async deleteImgAndRepositionImages(img: Image) {
@@ -196,10 +200,24 @@ export class ProjectFormComponent implements OnInit {
     let images: Image[] = [];
 
     imagesSnapshot.forEach((doc) => {
-      images.push(doc.data());
+      const img = doc.data();
+      if (img.type === 'image') images.push(doc.data());
     });
 
     return images;
+  }
+
+  // Loads vignette.
+  private async vignette(): Promise<Image> {
+    const imagesSnapshot = await getDocs(this.imgsRef);
+    let images: Image[] = [];
+
+    imagesSnapshot.forEach((doc) => {
+      const img = doc.data();
+      if (img.type === 'vignette') images.push(doc.data());
+    });
+
+    return images[0];
   }
 
   sortByPosition(images: Image[]): Image[] {

@@ -36,33 +36,44 @@ export const positioningFunction = functions.firestore
           // If it's a vignette, gets current position in _meta doc
           if (img?.type === 'vignette') {
             const metaRef: firebase.firestore.DocumentReference = db
-              .collection('projects')
+              .collection('admin')
               .doc('_meta');
             const meta = (await transaction.get(metaRef)).data();
             position = meta?.totalVignettes;
+            if (!position) {
+              position = 0;
+            }
             transaction.update(metaRef, {
               totalVignettes: position + 1,
             });
+
+            transaction.set(
+              imageRef,
+              {
+                vignettePosition: position,
+              },
+              { merge: true }
+            );
           } else {
             const project = (await transaction.get(projectRef)).data();
             position = project?.imageCount;
 
+            if (!position) {
+              position = 0;
+            }
+
             transaction.update(projectRef, {
               imageCount: position + 1,
             });
-          }
 
-          if (!position) {
-            position = 0;
+            transaction.set(
+              imageRef,
+              {
+                position,
+              },
+              { merge: true }
+            );
           }
-
-          transaction.set(
-            imageRef,
-            {
-              position,
-            },
-            { merge: true }
-          );
         }
       );
     }

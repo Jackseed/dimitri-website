@@ -45,7 +45,7 @@ export class VignetteListComponent implements OnInit {
     vignettesSnapshot.forEach((vignetteDoc) => {
       this.vignettes.push(vignetteDoc.data());
     });
-    //this.vignettes.sort((a, b) => a.position - b.position);
+    this.vignettes.sort((a, b) => a.vignettePosition! - b.vignettePosition!);
   }
 
   /*   private updatePosition(vignettes: Image[]) {

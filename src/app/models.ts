@@ -12,6 +12,7 @@ export interface Image {
   path?: string;
   projectId?: string;
   position?: number;
+  vignettePosition?: number;
   type?: 'vignette' | 'image';
 }
 
