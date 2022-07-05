@@ -1,5 +1,5 @@
 // Angular
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 // Components
@@ -15,6 +15,7 @@ import {
   query,
   where,
   collectionGroup,
+  collection,
   getDoc,
   doc,
 } from '@angular/fire/firestore';
@@ -28,7 +29,7 @@ import { filter, map } from 'rxjs/operators';
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.scss'],
 })
-export class HomepageComponent implements OnInit, OnDestroy {
+export class HomepageComponent implements OnDestroy {
   public grid: Grid = {
     cols: 3,
     gutterSize: '20',
@@ -62,18 +63,30 @@ export class HomepageComponent implements OnInit, OnDestroy {
           this.grid = { cols: 3, gutterSize: '20' };
         }
       });
-
     this.getVignettes();
   }
-  ngOnInit(): void {}
 
   async getVignettes() {
     this.vignettes = [];
+    const publishedProjectIds = await this.getPublishedProjectIds();
     const vignettesSnapshot = await getDocs(this.vignetteQuery);
     vignettesSnapshot.forEach((vignetteDoc) => {
-      this.vignettes.push(vignetteDoc.data());
+      // Sorts by published projects.
+      if (publishedProjectIds.includes(vignetteDoc.data().projectId!))
+        this.vignettes.push(vignetteDoc.data());
     });
     this.vignettes.sort((a, b) => a.vignettePosition! - b.vignettePosition!);
+  }
+
+  async getPublishedProjectIds(): Promise<string[]> {
+    let ids: string[] = [];
+    const projectsSnapshot = await getDocs(collection(this.db, 'projects'));
+    projectsSnapshot.forEach((projectDoc) => {
+      if (projectDoc.data().status === 'published')
+        ids.push(projectDoc.data().id);
+    });
+
+    return ids;
   }
 
   public async navigateToProject(projectId: string) {

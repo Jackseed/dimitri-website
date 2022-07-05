@@ -17,6 +17,7 @@ import {
   writeBatch,
   doc,
   collectionData,
+  collection,
 } from '@angular/fire/firestore';
 
 // Rxjs
@@ -35,6 +36,7 @@ export class VignetteListComponent implements OnInit {
   );
   public vignettes: Image[] = [];
   public vignettes$: Observable<Image[]>;
+  private publishedProjectIds: string[] = [];
 
   constructor(
     private db: Firestore,
@@ -43,6 +45,11 @@ export class VignetteListComponent implements OnInit {
   ) {
     this.getVignettes();
     this.vignettes$ = collectionData(this.vignetteQuery).pipe(
+      map((vignettes) =>
+        vignettes.filter((vignette) =>
+          this.publishedProjectIds.includes(vignette.projectId)
+        )
+      ),
       map((vignettes) =>
         vignettes.sort((a, b) => a.vignettePosition! - b.vignettePosition!)
       )
@@ -53,9 +60,20 @@ export class VignetteListComponent implements OnInit {
 
   async getVignettes() {
     this.vignettes = [];
+    await this.getPublishedProjectIds();
     const vignettesSnapshot = await getDocs(this.vignetteQuery);
     vignettesSnapshot.forEach((vignetteDoc) => {
-      this.vignettes.push(vignetteDoc.data());
+      // Sorts by published projects.
+      if (this.publishedProjectIds.includes(vignetteDoc.data().projectId!))
+        this.vignettes.push(vignetteDoc.data());
+    });
+  }
+
+  async getPublishedProjectIds() {
+    const projectsSnapshot = await getDocs(collection(this.db, 'projects'));
+    projectsSnapshot.forEach((projectDoc) => {
+      if (projectDoc.data().status === 'published')
+        this.publishedProjectIds.push(projectDoc.data().id);
     });
   }
 
