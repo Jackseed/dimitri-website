@@ -9,10 +9,6 @@ import { ProjectViewComponent } from './project-view/project-view.component';
 const routes: Routes = [
   { path: '', component: HomepageComponent },
   {
-    path: 'fesses',
-    component: ProjectViewComponent,
-  },
-  {
     path: 'admin',
     component: ProjectListComponent,
   },
@@ -27,6 +23,10 @@ const routes: Routes = [
   {
     path: 'admin/vignettes',
     component: VignetteListComponent,
+  },
+  {
+    path: ':title',
+    component: ProjectViewComponent,
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

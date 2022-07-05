@@ -75,7 +75,7 @@ export class VignetteListComponent implements OnInit {
     await batch.commit();
   }
 
-  public navigateProject(projectId: string) {
+  public navigateToProject(projectId: string) {
     this.router.navigate([`/admin/${projectId}/view`]);
   }
 

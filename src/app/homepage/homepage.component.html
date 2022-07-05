@@ -3,7 +3,7 @@
     <mat-grid-list [cols]="grid.cols" [gutterSize]="grid.gutterSize">
       <mat-grid-tile *ngFor="let image of vignettes">
         <img
-          routerLink="/{{ image.projectId }}"
+          (click)="navigateToProject(image.projectId!)"
           class="tiles pointer"
           src="{{ image.url }}"
         />
