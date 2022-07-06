@@ -21,6 +21,13 @@
     >
       <mat-icon>check_circle</mat-icon> <span>Projet publié</span>
     </div>
+    <div
+      class="icon-text"
+      fxFlex
+      *ngIf="(project$ | async)?.status === 'draft'"
+    >
+      <mat-icon>edit_note</mat-icon> <span>Brouillon</span>
+    </div>
     <div fxFlex></div>
     <button mat-icon-button (click)="openDialog()">
       <mat-icon>delete</mat-icon>
