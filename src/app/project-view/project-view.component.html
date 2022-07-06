@@ -1,4 +1,4 @@
-<div *ngIf="project$ | async as project">
+<div *ngIf="project$ | async as project" fxLayout="column">
   <header>
     <h1>{{ project.title }}</h1>
     <div *ngFor="let description of project.descriptions">
@@ -12,4 +12,7 @@
       <img src="{{ image.url }}" />
     </div>
   </main>
+  <footer fxLayoutAlign="center center">
+    <span>© Dimitri Grangeon</span>
+  </footer>
 </div>
