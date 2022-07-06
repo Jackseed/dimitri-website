@@ -1,5 +1,9 @@
+// Angular
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+// Components
+import { AuthComponent } from './admin/auth/auth.component';
 import { ProjectFormComponent } from './admin/project-form/project-form.component';
 import { ProjectListComponent } from './admin/project-list/project-list.component';
 import { VignetteListComponent } from './admin/vignette-list/vignette-list.component';
@@ -8,6 +12,7 @@ import { ProjectViewComponent } from './project-view/project-view.component';
 
 const routes: Routes = [
   { path: '', component: HomepageComponent },
+  { path: 'admin/login', component: AuthComponent },
   {
     path: 'admin',
     component: ProjectListComponent,
