@@ -2,7 +2,10 @@
   <mat-icon>keyboard_backspace</mat-icon>
 </button>
 <h2>Ordre des vignettes</h2>
-<p>Seuls les projets publiés sont listés. Drag & drop pour changer l'ordre (si buggy faut insister 😬)</p>
+<p>
+  Seuls les projets publiés sont listés. Drag & drop pour changer l'ordre
+  (sauvegarde automatique).
+</p>
 <main class="container" cdkDropListGroup>
   <ng-container *ngFor="let vignette of vignettes$ | async; let i = index">
     <div
