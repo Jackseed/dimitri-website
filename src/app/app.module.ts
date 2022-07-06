@@ -41,6 +41,7 @@ import { UploadTaskComponent } from './admin/upload-task/upload-task.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { ConfirmationDialogComponent } from './admin/confirmation-dialog/confirmation-dialog.component';
 import { VignetteListComponent } from './admin/vignette-list/vignette-list.component';
+import { AuthComponent } from './admin/auth/auth.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { VignetteListComponent } from './admin/vignette-list/vignette-list.compo
     DropzoneDirective,
     ConfirmationDialogComponent,
     VignetteListComponent,
+    AuthComponent,
   ],
   imports: [
     HttpClientModule,
