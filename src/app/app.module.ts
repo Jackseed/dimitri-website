@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 // Angularfire
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
@@ -54,6 +55,7 @@ import { VignetteListComponent } from './admin/vignette-list/vignette-list.compo
     VignetteListComponent,
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     FlexLayoutModule,

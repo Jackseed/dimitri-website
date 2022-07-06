@@ -5,13 +5,19 @@
     </nav>
     <nav fxLayout="row" id="social" fxLayoutAlign="start center">
       <button mat-icon-button (click)="toggleEmail()">
-        <mat-icon>home</mat-icon>
+        <mat-icon class="rs" svgIcon="mail"></mat-icon>
       </button>
-      <button mat-icon-button>
-        <mat-icon>favorite</mat-icon>
+      <button
+        mat-icon-button
+        (click)="redirectToNewTab('https://www.instagram.com/dodu_illu')"
+      >
+        <mat-icon class="rs" svgIcon="instagram"></mat-icon>
       </button>
-      <button mat-icon-button>
-        <mat-icon>more_vert</mat-icon>
+      <button
+        mat-icon-button
+        (click)="redirectToNewTab('https://www.pinterest.fr/dgrangeon/')"
+      >
+        <mat-icon class="rs" svgIcon="pinterest"></mat-icon>
       </button>
       <span *ngIf="emailVisible">dimitri.grangeon@gmail.com</span>
     </nav>
