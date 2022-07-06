@@ -10,24 +10,38 @@ import { VignetteListComponent } from './admin/vignette-list/vignette-list.compo
 import { HomepageComponent } from './homepage/homepage.component';
 import { ProjectViewComponent } from './project-view/project-view.component';
 
+// Angularfire
+import { redirectUnauthorizedTo, AuthGuard } from '@angular/fire/auth-guard';
+
+const redirectUnauthorizedToLogin = () =>
+  redirectUnauthorizedTo(['admin/login']);
+
 const routes: Routes = [
   { path: '', component: HomepageComponent },
   { path: 'admin/login', component: AuthComponent },
   {
     path: 'admin',
     component: ProjectListComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
   },
   {
     path: 'admin/:id/edit',
     component: ProjectFormComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
   },
   {
     path: 'admin/:id/view',
     component: ProjectViewComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
   },
   {
     path: 'admin/vignettes',
     component: VignetteListComponent,
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
   },
   {
     path: ':title',

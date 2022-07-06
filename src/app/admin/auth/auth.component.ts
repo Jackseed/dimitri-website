@@ -6,9 +6,7 @@ import { Router } from '@angular/router';
 // Angularfire
 import {
   Auth,
-  indexedDBLocalPersistence,
   sendPasswordResetEmail,
-  setPersistence,
   signInWithEmailAndPassword,
 } from '@angular/fire/auth';
 
@@ -66,7 +64,6 @@ export class AuthComponent implements OnInit {
     try {
       // Signs up & logs in.
       if (this.isLogin) {
-        setPersistence(this.auth, indexedDBLocalPersistence);
         await signInWithEmailAndPassword(this.auth, email, password)
           .then((_) => this.router.navigate([`admin`]))
           .catch((error: any) => {
