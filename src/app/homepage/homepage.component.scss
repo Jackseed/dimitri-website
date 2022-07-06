@@ -1,16 +1,14 @@
+.container {
+  margin-top: 12px;
+}
+
 img {
   width: 100%;
   height: 50%;
-  object-fit: contain;
 }
 
 a {
   margin-left: 0.5rem;
-}
-
-main {
-  width: 87.5%;
-  height: 100%;
 }
 
 .tiles {
@@ -20,4 +18,12 @@ main {
 
 .pointer {
   cursor: pointer;
+}
+
+main {
+  display: table;
+}
+
+footer {
+  min-height: 40px;
 }

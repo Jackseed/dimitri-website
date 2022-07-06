@@ -1,20 +1,16 @@
-<div fxFlexFill fxLayout="column" fxLayoutAlign="start start">
-  <header fxFlexFill fxFlex="8">
-    <nav fxFlexFill fxLayout="row">
-      <a href="/"><img src="../assets/mail.png" /></a>
-      <a href="/"><img src="../assets/insta.png" /></a>
-      <a href="/"><img src="../assets/pinterest.png" /></a>
-    </nav>
-  </header>
-  <main fxFlexAlign="center" fxFlex="92">
+<div fxFlexFill fxLayout="column" class="container">
+  <main fxFlexFill fxFlex="90" fxFlexAlign="center">
     <mat-grid-list [cols]="grid.cols" [gutterSize]="grid.gutterSize">
-      <mat-grid-tile *ngFor="let image of images">
+      <mat-grid-tile *ngFor="let image of vignettes">
         <img
-          routerLink="/{{ image.projectId }}"
+          (click)="navigateToProject(image.projectId!)"
           class="tiles pointer"
           src="{{ image.url }}"
         />
       </mat-grid-tile>
     </mat-grid-list>
   </main>
+  <footer fxFlex="10" fxLayoutAlign="center center">
+    <span>© Dimitri Grangeon</span>
+  </footer>
 </div>

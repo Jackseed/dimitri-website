@@ -1,0 +1,25 @@
+<div
+  fxFlexFill
+  class="dropzone"
+  dropzone
+  (hovered)="toggleHover($event)"
+  (dropped)="onDrop($event)"
+  [class.hovering]="isHovering"
+>
+  <div
+    *ngIf="type === 'vignette'"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+  >
+    <h3>Upload de vignette</h3>
+    <p>Drag & drop</p>
+  </div>
+  <div *ngIf="type === 'image'" fxLayout="column" fxLayoutAlign="center center">
+    <h3>Upload des images</h3>
+    <p>Drag & drop plusieurs à la fois</p>
+  </div>
+</div>
+
+<div *ngFor="let file of files; let i = index">
+  <app-upload-task [file]="file" [type]="type" [i]="i"></app-upload-task>
+</div>

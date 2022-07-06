@@ -1,9 +1,28 @@
-<div class="container" fxLayout="column" fxLayoutAlign="start start">
-  <header fxFlex="15">
-    <nav fxFlexFill>
-      <a href="/"><img src="../assets/logo.png" /></a>
+<div class="app-container" fxLayout="column" fxLayoutAlign="start start">
+  <header>
+    <nav>
+      <a href="/"><img id="logo" src="../assets/logo.jpg" /></a>
+    </nav>
+    <nav fxLayout="row" id="social" fxLayoutAlign="start center">
+      <button mat-icon-button (click)="toggleEmail()">
+        <mat-icon class="rs" svgIcon="mail"></mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        (click)="redirectToNewTab('https://www.instagram.com/dodu_illu')"
+      >
+        <mat-icon class="rs" svgIcon="instagram"></mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        (click)="redirectToNewTab('https://www.pinterest.fr/dgrangeon/')"
+      >
+        <mat-icon class="rs" svgIcon="pinterest"></mat-icon>
+      </button>
+      <span *ngIf="emailVisible">dimitri.grangeon@gmail.com</span>
     </nav>
   </header>
+
   <main fxFlex="85" fxFlexFill>
     <router-outlet></router-outlet>
   </main>

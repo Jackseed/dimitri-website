@@ -1,0 +1,48 @@
+.icon-text {
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.titre {
+  font-weight: 700;
+}
+
+.description {
+  width: 60%;
+}
+
+.upload-box {
+  padding-top: 20px;
+  height: 300px;
+  padding-bottom: 40px;
+}
+
+.vignette {
+  position: relative;
+  width: max(200px, 15vw);
+  height: max(200px, 15vw);
+  float: right;
+  display: inline;
+}
+
+#deleteVignette {
+  z-index: 2;
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  opacity: 0;
+}
+
+#img-container:hover + #deleteVignette {
+  opacity: 1;
+}
+
+#deleteVignette:hover {
+  opacity: 1;
+}
+
+.project-images {
+  width: 100%;
+  object-fit: contain;
+}

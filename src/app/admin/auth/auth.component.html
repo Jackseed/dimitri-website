@@ -1,0 +1,71 @@
+<div fxFlexFill fxLayoutAlign="center center">
+  <mat-card>
+    <div *ngIf="isLogin">
+      <h3>Connexion</h3>
+    </div>
+
+    <div *ngIf="isPasswordReset">
+      <h3>Réinitialiser le mot de passe</h3>
+      <button mat-icon-button (click)="changeType('login')">
+        <mat-icon>keyboard_backspace</mat-icon>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field [color]="email?.valid && 'accent'">
+        <span>
+          <input
+            matInput
+            formControlName="email"
+            type="email"
+            placeholder="Email"
+          />
+        </span>
+      </mat-form-field>
+
+      <mat-form-field
+        [color]="email?.valid && 'accent'"
+        *ngIf="!isPasswordReset"
+        id="password"
+      >
+        <span>
+          <input
+            matInput
+            formControlName="password"
+            type="password"
+            placeholder="Mot de passe"
+            autocomplete="off"
+          />
+        </span>
+      </mat-form-field>
+      <span>
+        <mat-error class="server-error">{{ serverMessage }}</mat-error>
+      </span>
+      <button
+        *ngIf="isPasswordReset"
+        mat-stroked-button
+        type="submit"
+        [disabled]="loading"
+      >
+        Réinitialiser
+      </button>
+
+      <button
+        *ngIf="!isPasswordReset"
+        mat-raised-button
+        color="accent"
+        type="submit"
+        [disabled]="form?.invalid || loading"
+      >
+        Se connecter
+      </button>
+      <button
+        mat-button
+        *ngIf="isLogin && !isPasswordReset"
+        (click)="changeType('reset')"
+      >
+        Mot de passe oublié ?
+      </button>
+    </form>
+  </mat-card>
+</div>

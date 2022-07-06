@@ -1,0 +1,26 @@
+<button mat-icon-button (click)="back()">
+  <mat-icon>keyboard_backspace</mat-icon>
+</button>
+<h2>Ordre des vignettes</h2>
+<p>
+  Seuls les projets publiés sont listés. Drag & drop pour changer l'ordre
+  (sauvegarde automatique).
+</p>
+<main class="container" cdkDropListGroup>
+  <ng-container *ngFor="let vignette of vignettes$ | async; let i = index">
+    <div
+      cdkDropList
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="drop($event)"
+      [cdkDropListData]="{ item: vignette, index: i }"
+    >
+      <div cdkDrag class="tiles">
+        <img
+          class="tiles"
+          src="{{ vignette.url }}"
+          (click)="navigateToProject(vignette.projectId!)"
+        />
+      </div>
+    </div>
+  </ng-container>
+</main>

@@ -1,0 +1,27 @@
+<div class="container">
+  <header fxFlexLayout="row" fxFlexAlign="center end" class="title-line">
+    <h2 class="title" fxFlex>Liste des projets</h2>
+    <button fxFlex="nogrow" mat-stroked-button (click)="goToVignettes()">
+      Gérer les vignettes
+    </button>
+    <button fxFlex="nogrow" mat-stroked-button (click)="addProject()">
+      Ajouter un projet
+    </button>
+  </header>
+  <main>
+    <article
+      class="item"
+      *ngFor="let project of projects$ | async"
+      [routerLink]="[project.id, 'edit']"
+    >
+      <h3>{{ project.title }}</h3>
+      <div fxFlex fxFlexFill></div>
+      <div class="icon-text" fxFlex *ngIf="project.status === 'published'">
+        <mat-icon matTooltip="Projet publié">check_circle</mat-icon>
+      </div>
+      <div class="icon-text" fxFlex *ngIf="project.status === 'draft'">
+        <mat-icon matTooltip="Brouillon">edit_note</mat-icon>
+      </div>
+    </article>
+  </main>
+</div>
