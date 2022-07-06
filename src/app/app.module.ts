@@ -24,6 +24,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 // Environments
 import { environment } from 'src/environments/environment';
@@ -69,6 +70,7 @@ import { VignetteListComponent } from './admin/vignette-list/vignette-list.compo
     FormsModule,
     ReactiveFormsModule,
     DragDropModule,
+    MatTooltipModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),

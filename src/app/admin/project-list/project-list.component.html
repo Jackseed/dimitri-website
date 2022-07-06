@@ -15,6 +15,13 @@
       [routerLink]="[project.id, 'edit']"
     >
       <h3>{{ project.title }}</h3>
+      <div fxFlex fxFlexFill></div>
+      <div class="icon-text" fxFlex *ngIf="project.status === 'published'">
+        <mat-icon matTooltip="Projet publié">check_circle</mat-icon>
+      </div>
+      <div class="icon-text" fxFlex *ngIf="project.status === 'draft'">
+        <mat-icon matTooltip="Brouillon">edit_note</mat-icon>
+      </div>
     </article>
   </main>
 </div>
