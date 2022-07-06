@@ -6,8 +6,18 @@
   (dropped)="onDrop($event)"
   [class.hovering]="isHovering"
 >
-  <h3>Upload d'images</h3>
-  <p>Drag & Drop</p>
+  <div
+    *ngIf="type === 'vignette'"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+  >
+    <h3>Upload de vignette</h3>
+    <p>Drag & drop</p>
+  </div>
+  <div *ngIf="type === 'image'" fxLayout="column" fxLayoutAlign="center center">
+    <h3>Upload des images</h3>
+    <p>Drag & drop plusieurs à la fois</p>
+  </div>
 </div>
 
 <div *ngFor="let file of files; let i = index">

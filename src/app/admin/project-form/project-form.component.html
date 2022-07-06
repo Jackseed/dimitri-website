@@ -5,7 +5,19 @@
     </button>
     <div fxFlex></div>
     <div *ngIf="(project$ | async)?.status === 'draft'">
-      <button mat-stroked-button (click)="publish()">Publier</button>
+      <button
+        mat-stroked-button
+        (click)="publish()"
+        [disabled]="!(isVignetteUploaded$ | async)"
+      >
+        <span
+          [matTooltip]="
+            !(isVignetteUploaded$ | async) ? 'Manque une vignette' : ''
+          "
+        >
+          Publier
+        </span>
+      </button>
     </div>
     <div *ngIf="(project$ | async)?.status === 'published'">
       <button mat-stroked-button (click)="unpublish()">Retirer du site</button>
@@ -66,7 +78,7 @@
       </mat-form-field>
     </h3>
 
-    <button mat-stroked-button (click)="addDescription()">
+    <button mat-button (click)="addDescription()">
       Ajouter une ligne de description
     </button>
     <ng-container formArrayName="descriptions">
