@@ -9,7 +9,7 @@
 }
 
 .description {
-  width: 55%;
+  width: 50%;
 }
 
 .upload-box {
@@ -45,4 +45,8 @@
 .project-images {
   width: 100%;
   object-fit: contain;
+}
+
+#add {
+  margin-left: -8px;
 }
