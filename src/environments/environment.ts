@@ -5,13 +5,12 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: 'AIzaSyDjV8ttjNu6K0QSs-RZovBJbAQZQVvb9S4',
-    authDomain: 'dimitri-website.firebaseapp.com',
-    projectId: 'dimitri-website',
-    storageBucket: 'dimitri-website.appspot.com',
-    messagingSenderId: '271349958968',
-    appId: '1:271349958968:web:8cef7cbb755946bbe919cd',
-    measurementId: 'G-ELT1MSWXB8',
+    apiKey: 'AIzaSyAS3TVHsIuOMa5wdu4mw8-wKPUCkJZYtlE',
+    authDomain: 'dimitri-website-dev.firebaseapp.com',
+    projectId: 'dimitri-website-dev',
+    storageBucket: 'dimitri-website-dev.appspot.com',
+    messagingSenderId: '989238167139',
+    appId: '1:989238167139:web:df97a6cccedaf555001a56',
   },
 };
 
