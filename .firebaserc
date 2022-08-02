@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "dimitri-website"
-  }
+    "default": "dimitri-website",
+    "prod": "dimitri-website",
+    "dev": "dimitri-website-dev"
+  },
+  "targets": {}
 }

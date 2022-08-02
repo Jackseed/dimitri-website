@@ -1,29 +1,40 @@
-<div class="app-container" fxLayout="column" fxLayoutAlign="start start">
+<div class="app-container" fxLayout="column" fxLayoutAlign="center center">
   <header>
     <nav>
       <a href="/"><img id="logo" src="../assets/logo.jpg" /></a>
     </nav>
-    <nav fxLayout="row" id="social" fxLayoutAlign="start center">
-      <button mat-icon-button (click)="toggleEmail()">
-        <mat-icon class="rs" svgIcon="mail"></mat-icon>
+    <nav
+      fxLayout="row"
+      fxLayoutAlign="start center"
+      fxLayoutGap="8px"
+      class="social-bar"
+    >
+      <button
+        fxLayoutAlign="center center"
+        mat-icon-button
+        (click)="toggleEmail()"
+      >
+        <mat-icon class="rs" id="envelope" svgIcon="mail"></mat-icon>
       </button>
       <button
+        fxLayoutAlign="center center"
         mat-icon-button
         (click)="redirectToNewTab('https://www.instagram.com/dodu_illu')"
       >
         <mat-icon class="rs" svgIcon="instagram"></mat-icon>
       </button>
       <button
+        fxLayoutAlign="center center"
         mat-icon-button
         (click)="redirectToNewTab('https://www.pinterest.fr/dgrangeon/')"
       >
         <mat-icon class="rs" svgIcon="pinterest"></mat-icon>
       </button>
-      <span *ngIf="emailVisible">dimitri.grangeon@gmail.com</span>
+      <span *ngIf="emailVisible" id="email">dimitri.grangeon@gmail.com</span>
     </nav>
   </header>
 
-  <main fxFlex="85" fxFlexFill>
+  <main fxFlex="80" fxFlex.gt-md="85" fxFlexFill>
     <router-outlet></router-outlet>
   </main>
 </div>

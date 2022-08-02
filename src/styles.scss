@@ -36,13 +36,3 @@ span {
     font-size: 12px;
   }
 }
-
-.app-container {
-  width: 620px;
-  height: 100%;
-  margin: 0 auto;
-  @include layout-bp(lt-sm) {
-    width: 90%;
-    margin: 0 auto;
-  }
-}
