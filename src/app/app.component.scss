@@ -61,6 +61,14 @@ main {
   margin-top: 16px;
 }
 
+.logo-bar {
+  @include layout-bp(gt-md) {
+    margin-left: -65px;
+  }
+}
 .social-bar {
   margin-top: -20px;
+  @include layout-bp(gt-md) {
+    margin-left: -50px;
+  }
 }

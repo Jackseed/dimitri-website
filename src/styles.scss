@@ -13,26 +13,24 @@ body {
 h1 {
   font-family: "Roboto", "Helvetica", sans-serif;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 p {
   font-family: "Roboto", "Helvetica", sans-serif;
   font-weight: 100;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 span {
   font-family: "Roboto", "Helvetica", sans-serif;
   font-weight: 100;
-  font-size: 12px;
+  font-size: 14px;
   @include layout-bp(xs) {
-    font-size: 14px;
+    font-size: 16px;
   }
-  @include layout-bp(sm) {
-    font-size: 12px;
-  }
-  @include layout-bp(xl) {
-    font-size: 12px;
-  }
+}
+
+footer {
+  min-height: 80px;
 }
